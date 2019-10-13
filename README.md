@@ -1,6 +1,11 @@
 # Overview
 
-This is a starter template for a data analysis exercise, containing data, a codebook and an RMarkdown file.
+[This is the repository for Amanda Blubaugh's Data Analysis Exercise]( https://epid8060fall2019.github.io/Amanda_Blubaugh-dataanalysis-exercise/
+)
+
+
+
+This was created by a template for a data analysis exercise, containing data, a codebook and an RMarkdown file.
 
 It is set up as a small website.
 
