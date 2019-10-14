@@ -5,5 +5,7 @@ output:
     toc: FALSE
 ---
 
-If you want to learn more about me, you can visit [this website](LINK-TO-INTRODUCTION-PAGE).
+Amanda Blubaugh (alblub@uga.edu)
+
+If you want to learn more about me or my lab, you can visit [Banovic Labs](https://banoviclabs.github.io/Banovic_Lab/).
 

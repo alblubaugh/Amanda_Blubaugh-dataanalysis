@@ -1,6 +1,6 @@
 ---
 title: Continuous Outcome Analysis
-author: YOURNAME
+author: Amanda Blubaugh
 date: "`r Sys.Date()`"
 #bibliography: ../media/references.bib
 output: 
@@ -31,6 +31,8 @@ library('corrplot') #to make a correlation plot. You can use other options/packa
 library('visdat') #for missing data visualization
 library('caret') #for model fitting
 library('earth')
+library('visdat')
+library('forcats')
 ```
 
 
@@ -39,22 +41,86 @@ We will be exploring and fitting a dataset of norovirus outbreaks. You can look 
 
 ```{r loaddata}
 #Write code that loads the dataset and does a quick check to make sure the data loaded ok (using e.g. `str` and `summary` or similar such functions).
+raw_data <- read.csv("norodata.csv", header=TRUE)
+head(raw_data)
+str(raw_data)
+summary(raw_data)
 
-#data_raw <- (FILL HERE)
+class(raw_data)
 
 ```
-
+Here we can see there are 1022 observations (so just over 1,000). Each observation has 139 attached variables.
 
 # Data exploration and cleaning
 
+To first explore the data, I decided to remove those observations that didn't have an EpiCurve, narrowing our total observations down to 231.  This is a little over 5x less observations than in the raw data.
+```{r clean and explore}
+raw_data %>%
+  filter(EpiCurve == "Y")
+
+```
+I notice that the CDC authors a lot of cases.  I am going to explore this a bit, as well as other data (years for example)
+
+```{r}
+
+#here I created, deleted, and inspected a few different variables over some time periods that varied.  I also opened the large norodata_codebook.doc in Microsoft Word to read.
+
+year2010 <- filter(raw_data, OBYear == 2010)
+str(year2010)
+
+
+RiskAll <- year2010$RiskAll
+head(RiskAll)
+RateAll <- year2010$RateAll
+head(RateAll)
+
+#I ended up ditching plotting this.  Way to few samples to start (only 6 from 2010)
+#plot(year2010, aes(RiskAll, RateAll))
+
+#playing with this, looks like there are only 6 per year or so outbreaks per year anyway
+year2000 <- filter(raw_data, OBYear == 2000)
+head(year2000)
+
+Pub_year_2000 <- filter(raw_data, Pub_Year == 2000)
+head(Pub_year_2000)
+
+Author_CDC <- filter(raw_data, Author == "CDC")
+head(Author_CDC)
+
+```
 
 ## Investigating the outcome of interest
 
 Let's assume that our main outcome of interest is the fraction of individuals that become infected in a given outbreak. The data reports that outcome (called `RateAll`), but we'll also compute it ourselves so that we can practice creating new variables. To do so, take a look at the data (maybe peek at the Codebook) and decide which of the existing variables you should use to compute the new one. This new outcome variable will be added to the data frame.
 
+Knowing this, some important variables in the codebook are:
+RateAll = (secondary cases + primary cases/persons at risk)*100
+
+Cases1 = Total number of suspected primary cases
+Cases2 = Total number of suspected secondary cases
+CasesAll Total number of suspected cases, including both primary and secondary cases
+
+Rate1 = (primary cases/persons at risk)*100
+Rate2 = (secondary cases/persons at risk)*100
+RiskAll = Total number of persons at risk of being a primary or secondary case
+
+
 ```{r createvar}
 # Use the `mutate()` function from the `dplyr` package to create a new column with this value. Call the new variable `fracinf`.
+
+# This involves the variables we listed above, as read from the codebook. Taking a look at a few here:
+head(raw_data$Cases1)
+head(raw_data$Cases2)
+head(raw_data$RateAll)
+
+#Adding a variable to a new data set from the original raw_data set; the new variable being fracinf and the data set being added_column
+added_column <- raw_data %>%
+  dplyr::mutate(fracinf =(CasesAll/RiskAll)*100)
+
+head(added_column$fracinf)
+
 #d <- data_raw %>% dplyr::mutate(FILL HERE)
+#my 'd' for this portion of the exercise is added_column
 ```
 
 
@@ -70,7 +136,27 @@ Use both text summaries and plots to take a look at the new variable you created
 
 ```{r checkdata}
 #Write code that takes a look at the values of the `fracinf` variable you created. Look at both text summaries and a figure.
+
+glimpse(added_column$fracinf)
+#I can see my new variable is created successfully
+glimpse(added_column$RateAll)
+#Comparing it to RateAll, we have the main part of the calculation completed similarly
+
+
+#Summaries seem to differ by the quartile, possibly due to all of the NAs?
+summary(added_column$fracinf)
+summary(added_column$RateAll)
+
+
+#The plots of each individual variable versus RiskAll looks almost identical. I have infinity calculated where the answer for RateAll is 0. Since (CasesAll/RiskAll)*100 makes my fracinf variable, I am suspicious of the RiskAll variable.
+added_column %>%
+  ggplot(aes(RiskAll, RateAll)) + geom_point()
+
+added_column %>%
+  ggplot(aes(RiskAll, fracinf)) + geom_point()
+  
 ```
+
 
 We notice there are NAs in this variable and the distribution is not normal. The latter is somewhat expected since our variable is a proportion, so it has to be between 0 and 1. There are also a lot of infinite values. Understand where they come from. 
 
@@ -81,12 +167,36 @@ First, create a plot that lets you quickly see if/how the variables differ.
 # Plot one variable on the x axis, the other on the y axis
 # also plot the difference of the 2 variables
 # make sure you adjust so both are in the same units
+
+
+#Comparing RateAll to our newly created variable fracinf, we can see an almost perfect positive linear relationship, so the majority of our calculated variables match that of RateAll. If we don't specificy our code line to remove NA variables, the ggplot will automatically remove those missing values with geom_point(), which happens to be 120 rows.
+
+added_column %>%
+  filter(RateAll != 'NA', fracinf != 'NA') %>%
+  ggplot(aes(RateAll, fracinf)) + geom_point()
+
+
+#Creating a difference variable between RateAll and our created variable fracinf shows that the majority of the differences between the two calculations lies in the area when RiskAll = 0. This would imply that those outbreaks that have 0 risk have varying calculated total rates/fractions of infections. This makes sense; how can you predict rate/fractions infected from 0 risk?
+
+difference <- added_column$RateAll - added_column$fracinf
+
+ggplot(added_column, aes(RiskAll, difference)) + geom_point()
+
+
 ```
 
 Both ways of plotting the data show that for most outbreaks, the two ways of getting the outcome agree. So that's good. But we need to look closer and resolve the problem with infinite values above. Check to see what the `RateAll` variable has for those infinite values.
 
 ```{r infvalues}
 #Write code that looks at the values of RateAll where we have inifinite values
+summary(added_column$RateAll)
+summary(added_column$fracinf)
+
+
+added_column %>%
+  filter(fracinf == 'Inf') %>%
+  ggplot(aes(RiskAll, RateAll)) + geom_point()
+
 ```
 
 You should find that all of the reported values are 0. So what makes more sense? You should have figured out that the infinite values in our computed variables arise because the `RiskAll` variable is 0. That variable contains the total number of persons at risk for an outbreak. If nobody is at risk of getting infected, of course, we can't get any infected. So `RateAll` being 0 is technically correct. But does it make sense to include "outbreaks" in our analysis where nobody is at risk of getting infected? One should question how those got into the spreadsheet in the first place. 
@@ -97,6 +207,19 @@ Here, I think that if nobody is at risk, we shouldn't include those outbreaks in
 
 ```{r filter1}
 #Write code that removes all observations that have an outcome that is not very useful, i.e. either NA or infinity. Then look at the outcome variable again to make sure things are fixed. Also check the size of the new dataset to see by how much it shrunk.
+
+# This shows us we have 323 observations that are Inf with our fracinf variable. Let's get rid of them.
+added_column
+
+added_column %>%
+  filter(fracinf == 'Inf')
+
+# This makes sense. 1022- 323 = 699? We have 579 left. Hmm...
+useful_data <- added_column %>%
+  filter(fracinf != 'Inf')
+
+# Well, we are down to number of observations we are supposed to have.
+
 ```
 
 
@@ -113,6 +236,16 @@ Note that - as often happens for real data - there are inconsistencies between t
 
 ```{r reducepredictors}
 #write code to select the specified variables
+
+#I am using useful_data, which already has those observations removed which are fracinf = Inf, leaving 579 observations. Now we will only select for those variables of interest.
+
+reduced_set <- useful_data %>%
+  dplyr::select(Action1, CasesAll, Category, Country, Deaths, gg2c4, Hemisphere, Hospitalizations, MeanA1, MeanD1, MeanI1, MedianA1, MedianD1, MedianI1, OBYear, Path1, RiskAll, season, Setting_1, Setting_2, Trans1, Vomit)
+
+#Taking a look at how our variable number went from 140 to 22, still keeping the same 579 observations as before.
+str(reduced_set)
+summary(reduced_set)
+
 ```
 
 Your reduced dataset should contain 579 observations and 22 variables.
@@ -123,14 +256,29 @@ We can start by looking at missing data. While the `summary` function gives that
 
 ```{r check-reduced-data}
 # this code prints number of missing for each variable (assuming your dataframe is called d)
-# print(colSums(is.na(d))) 
-# write code to use the visdat R package, add code that plots a heatmap of missing values  
+
+print(colSums(is.na(reduced_set)))
+      
+# write code to use the visdat R package, add code that plots a heatmap of missing values 
+# I added library loading of this package to the top of my code
+
+# The vis_miss function shows us MeanA1 and MedianA1 are really the only two major contributors of variables with NAs. This is also visible in vis_dat, but we have sorted it in vis_miss with sort_miss = TRUE. Deaths and hospitalizations are the next highest missing value variables, but at less than 5% missing compared to the 96% and 93% missing variables in MeanA1 and MedianA1, respectively.
+vis_miss(reduced_set, sort_miss= TRUE)
+vis_dat(reduced_set)
+
 ```
 
 It looks like we have a lot of missing data for the `MeanA1` and `MedianA1` variables. If we wanted to keep those variables, we would be left with very few observations. So let's drop those two variables. After that, we will drop all observations that have missing data (seems to be `Hospitalization` and `Deaths`).
 
 ```{r further-reduce-data}
 # write code to remove the 2 "A1" variables, then drop all remaining observations with NA
+
+refined_set <- reduced_set %>%
+  dplyr::select(Action1, CasesAll, Category, Country, Deaths, gg2c4, Hemisphere, Hospitalizations, MeanD1, MeanI1, MedianD1, MedianI1, OBYear, Path1, RiskAll, season, Setting_1, Setting_2, Trans1, Vomit)
+
+# Now we are down to 20 variables of interest
+str(refined_set)
+summary(refined_set)
 ```
 
 
@@ -138,12 +286,43 @@ Let's now check the format of each variable. Depending on how you loaded the dat
 
 ```{r further-clean-data}
 # write code to format variables as needed
+# With our vis_dat plot, we can see no variables have a 'character' coding. We will proceed as is for now and come back to this if we see we need it.
+
+vis_dat(raw_data)
+vis_dat(reduced_set)
+vis_dat(refined_set)
+
 ```
 
 Take another look at the data. You should find that for the dataset, most things look reasonable, but the variable `Setting_1` has a lot of different levels/values. That many categories, most with only a single entry, will likely not be meaningful for modeling. One option is to drop the variable. But assume we think it's an important variable to include and we are especially interested in the difference between restaurant settings and other settings. We could then create a new variable that has only two levels, `Restaurant` and `Other`.
 
 ```{r recode-setting}
-#write code that creates a new variable called `Setting` based on `Setting_1` buth with only 2 levels, `Restaurant` and `Other`. Then remove the `Setting_1` variable. Note that restaurant is sometimes capitalized and sometimes not. You need to fix that first. For these lines of code, the 'Factor' chapter in R4DS might be helpful here.
+#write code that creates a new variable called `Setting` based on `Setting_1` but with only 2 levels, `Restaurant` and `Other`. Then remove the `Setting_1` variable. Note that restaurant is sometimes capitalized and sometimes not. You need to fix that first. For these lines of code, the 'Factor' chapter (Chapter 15) in R4DS might be helpful here.
+
+# I went ahead and added loading the forcats library to my code on top
+
+# Let's review these this categoty
+head(levels(refined_set$Setting_1))
+
+# So many levels! 388 different answers
+
+#I played around with this for a long time trying to figure out how to use fct_collapse or another function in Factors to solve this issue, like fct_lump. Moved on.
+final_set <- refined_set %>%
+  mutate(Setting = fct_collapse(Setting_1, Restaurant = c("restaurant","Restaurant"), group_other= TRUE))
+
+# This adds Setting, but isn't accruately finding restaurant in the factor levels.
+#Use grep to get those rows that should be in the restaurant category
+
+shouldBerestaurant <- grep("restaurant" , final_set$Setting_1)
+shouldBeRestaurant <- grep("Restaurant" , final_set$Setting_1)
+shouldbePos <- combine(shouldBerestaurant,shouldBeRestaurant)
+
+# This identifies the rows that should have Restaurant marked as their level in the new Setting factor
+shouldbePos
+
+# We know the 3rd, 5th, and 7th rows of observations have to do with restaurant in the Setting_1 variable, so we can see if our equation above worked to change those Setting factor levels to the correct level.
+
+
 ```
 
 
