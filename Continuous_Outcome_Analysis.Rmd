@@ -32,9 +32,9 @@ library('visdat') #for missing data visualization
 library('caret') #for model fitting
 library('earth')
 library('visdat')
-library('forcats')
 library('gtools')
 library('gridExtra')
+library('cowplot')
 ```
 
 
@@ -291,11 +291,12 @@ Let's now check the format of each variable. Depending on how you loaded the dat
 
 ```{r further-clean-data}
 # write code to format variables as needed
-# With our vis_dat plot, we can see no variables have a 'character' coding. We will proceed as is for now and come back to this if we see we need it.
+# With our vis_dat plot, we can see no variables have a 'character' coding.
 
 vis_dat(raw_data)
 vis_dat(reduced_set)
 vis_dat(refined_set)
+
 
 ```
 
@@ -306,7 +307,7 @@ Take another look at the data. You should find that for the dataset, most things
 
 # I went ahead and added loading the forcats library to my code on top
 
-# Let's review these this categoty
+# Let's review this categoty
 head(levels(refined_set$Setting_1))
 
 # So many levels! 388 different answers
@@ -358,13 +359,36 @@ Next, let's create a few plots showing the outcome and the predictors.
 ggplot(final_draft, aes(RiskAll, RateAll)) + geom_point()-> p1
 ggplot(final_draft, aes(MedianD1, RateAll)) + geom_point() -> p2
 ggplot(final_draft, aes(MeanD1, RateAll)) + geom_point() -> p3
-grid.arrange(p1, p2, p3, ncol=3)
+ggplot(final_draft, aes(Hospitalizations, RateAll)) + geom_point() -> p4
+ggplot(final_draft, aes(Vomit, RateAll)) + geom_point() -> p5
+ggplot(final_draft, aes(MeanI1, RateAll)) + geom_point() -> p6
+ggplot(final_draft, aes(MedianI1, RateAll)) + geom_point() -> p7
+ggplot(final_draft, aes(CasesAll, RateAll)) + geom_point() -> p8
+ggplot(final_draft, aes(Deaths, RateAll)) + geom_point() -> p9
+ggplot(final_draft, aes(OBYear, RateAll)) + geom_point() -> p9
+grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, ncol=2)
+
+#plot the OBYear separately from the others, since it is a factor level variable
+p9
 ```
 
 One thing I notice in the plots is that there are lots of zeros for many predictors and things look skewed. That's ok, but means we should probably standardize these predictors. One strange finding (that I could have caught further up when printing the numeric summaries, but didn't) is that there is (at least) one outbreak that has outbreak year reported as 0. That is, of course, wrong and needs to be fixed. There are different ways of fixing it, the best, of course, would be to trace it back and try to fix it with the right value. We won't do that here. Instead, we'll remove that observation.
 
 ```{r remove-wrong-year}
 # write code that figures out which observation(s) have 0 years and remove those from the dataset.
+
+#Let's look closer at that last OBYear graph we made. If we look with drop=FALSE for discretely dropping factor levels with no data, there are two years (1992 and a year range of 2002-2007) that have no data within them, also.
+ggplot(final_draft, aes(OBYear, RateAll)) + geom_point() + scale_fill_discrete(drop=FALSE) + scale_x_discrete(drop=FALSE)
+# I see the 0, and it is there in the overview
+glimpse(final_draft$OBYear)
+
+# Rip it out
+removed_0OBYear <- subset(final_draft, OBYear != "0")
+
+# I can see the 0 timepoint is gone now. The droplevels function also removed the factor levels for years that had no data attached as well.
+removed_0OBYear <- droplevels(removed_0OBYear)
+glimpse(removed_0OBYear$OBYear)
+ggplot(removed_0OBYear, aes(OBYear, RateAll)) + geom_point() + scale_fill_discrete(drop=FALSE) + scale_x_discrete(drop=FALSE)
 # do some quick check to make sure OByear values are all reasonable now
 ```
 
@@ -372,6 +396,19 @@ Another useful check is to see if there are strong correlations between some of 
 
 ```{r corrplot}
 # using e.g. the corrplot package (or any other you like), create a correlation plot of the numeric variables
+
+#update final draft to match our last edited data version
+final_draft <- removed_0OBYear
+
+#final_draft
+
+#Let's make a correlation matrix of our numeric variables only by making a numericOnly group
+numericOnly <- final_draft %>%
+  select_if(is.numeric)
+
+corM <- cor(numericOnly)
+corrplot(corM, type="upper", method="circle")
+
 ```
 
 
@@ -383,6 +420,27 @@ Next, let's create plots for the categorical variables, again our main outcome o
 ```{r plots-2}
 #write code that produces plots showing our outcome of interest on the y-axis and each categorical predictor on the x-axis.
 #you can use the facet_wrap functionality in ggplot for it, or do it some other way.
+
+# ggplot with stat="identity" so the height of the bar is representative of the value in the data and not a weighted accross the groups. Also added to leave the x axis text blank since there are color codings to the levels of each categorical predictor.
+ggplot(final_draft, aes(Category, RateAll)) + geom_bar(stat="identity", aes(fill=Category)) + theme( axis.text.x = element_blank(), legend.position = "bottom", legend.key.size = unit(0.1, "cm")) -> p1
+
+ggplot(final_draft, aes(Country, RateAll)) + geom_bar(stat="identity", aes(fill=Country)) + theme( axis.text.x = element_blank(), legend.position = "bottom", legend.key.size = unit(0.1, "cm")) -> p2
+
+ggplot(final_draft, aes(Hemisphere, RateAll)) + geom_bar(stat="identity", aes(fill=Hemisphere)) + theme( axis.text.x = element_blank()) -> p3
+
+ggplot(final_draft, aes(Path1, RateAll)) + geom_bar(stat="identity", aes(fill=Path1)) + theme( axis.text.x = element_blank()) -> p4
+
+ggplot(final_draft, aes(Trans1, RateAll)) + geom_bar(stat="identity", aes(fill=Trans1)) + theme( axis.text.x = element_blank(), legend.position = "bottom", legend.key.size = unit(0.1, "cm")) -> p5
+
+ggplot(final_draft, aes(season, RateAll)) + geom_bar(stat="identity", aes(fill=season)) + theme( axis.text.x = element_blank(), legend.position = "bottom", legend.key.size = unit(0.1, "cm")) -> p6
+
+ggplot(final_draft, aes(Action1, RateAll)) + geom_bar(stat="identity", aes(fill=Action1)) + theme( axis.text.x = element_blank(), legend.position = "bottom", legend.key.size = unit(0.1, "cm")) -> p7
+
+ggplot(final_draft, aes(gg2c4, RateAll)) + geom_bar(stat="identity", aes(fill=gg2c4)) + theme( axis.text.x = element_blank()) -> p8
+
+#trying cowplot this time, library loaded at beginning. I played with this for a while trying to aesthetically make it more pleasing while not cutting off the separate color coded keys. Will move on since this is exploratory.
+cowplot::plot_grid(p1, p2, p3, p4, p5, p6, p7, p8)
+
 ```
 
 The plots do not look pretty, which is ok for exploratory. We can see that a few variables have categories with very few values (again, something we could have also seen using `summary`, but graphically it is usually easier to see). This will likely produce problems when we fit using cross-validation, so we should fix that. Options we have: 
@@ -396,12 +454,61 @@ Let's use a mix of these approaches. We'll drop the `Category` variable, we'll r
 ```{r clean-categorical}
 # write code that implements the cleaning steps described above.
 # then check again (e.g. with a plot) to make sure things worked
+final_draft
+
+removeCategory <- final_draft %>%
+  dplyr::select(-c(Category))
+
+# Checked that category was gone with removeCategory before proceeding
+#Look at levels and answers for data in Hemisphere variable
+glimpse(removeCategory$Hemisphere)
+removeHemisphere <- removeCategory %>%
+  subset(Hemisphere != "Unspecified")
+
+# checking removeHemisphere let me see I only lost the one observation that was Unspecified for Hemisphere
+# look at responses and levels in Action variable
+glimpse(removeHemisphere$Action1)
+combineAction1 <- removeHemisphere %>%
+  mutate(Action1= fct_recode(Action1, "Unspecified" = "Unknown"))
+
+glimpse(combineAction1$Path1)
+combinePath1 <- combineAction1 %>%
+  mutate(Path1= fct_recode(Path1, "Unspecified" = "Unknown"))
+
+glimpse(combinePath1$Path1)
+
+final_draft <- combinePath1
+
+ggplot(final_draft, aes(Hemisphere, RateAll)) + geom_bar(stat="identity", aes(fill=Hemisphere)) + theme( axis.text.x = element_blank()) -> p1
+
+ggplot(final_draft, aes(Path1, RateAll)) + geom_bar(stat="identity", aes(fill=Path1)) + theme( axis.text.x = element_blank()) -> p2
+
+ggplot(final_draft, aes(Action1, RateAll)) + geom_bar(stat="identity", aes(fill=Action1)) + theme( axis.text.x = element_blank()) -> p3
+
+grid.arrange(p1, p2, p3)
+
+
 ```
 
 
 At this step, you should have a dataframe containing 551 observations, and 19 variables: 1 outcome, 9 numeric/integer predictors, and 9 factor variables. There should be no missing values.
 
+```{r checkup}
+#final_draft
+#glimpse(final_draft)
 
+#Looks like I have 20 variables since I have my fracinf variable and my RateAll variable (2 outcomes). My observation number is correct. We will drop RateAll and work with fracinf as our outcome variable from here out. Also will put fracinf as the first column variable for the code later on.
+
+removeRateAll <- final_draft %>%
+  select(-c(RateAll))
+
+putFracinfFirst <- removeRateAll %>%
+  select(fracinf, everything())
+
+final_draft <- putFracinfFirst
+
+final_draft
+```
 # Model fitting
 
 
@@ -416,10 +523,11 @@ Depending on the data and question, we might want to reserve some of the data fo
 ```{r split-data}
 #this code does the data splitting. I still assume that your data is stored in the `d` object.
 #uncomment to run
-#set.seed(123)
-#trainset <- caret::createDataPartition(y = d$fracinf, p = 0.7, list = FALSE)
-#data_train = d[trainset,] #extract observations/rows for training, assign to new variable
-#data_test = d[-trainset,] #do the same for the test set
+
+set.seed(123)
+trainset <- caret::createDataPartition(y = final_draft$fracinf, p = 0.7, list = FALSE)
+data_train = final_draft[trainset,] #extract observations/rows for training, assign to new variable
+data_test = final_draft[-trainset,] #do the same for the test set
 ```
 
 :::note
@@ -433,6 +541,9 @@ Now let's begin with the model fitting. We'll start by looking at a _null model_
 ```{r clean-na}
 #write code that computes the RMSE for a null model, which is just the mean of the outcome
 #remember that from now on until the end, everything happens with the training data
+RMSE(data_train$fracinf, mean(data_train$fracinf))
+
+# The code above gives me the RMSE (28.20524) by calculating the outcome versus a null model (mean(data_train$fracinf))
 ```
 
 
@@ -442,16 +553,18 @@ Now we'll fit the outcome to each predictor one at a time. To evaluate our model
 
 ```{r}
 #There is probably a nicer tidyverse way of doing this. I just couldn't think of it, so did it this way.
-#set.seed(1111) #makes each code block reproducible
-#fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
-#Npred <- ncol(data_train)-1 # number of predictors
-#resultmat <- data.frame(Variable = names(data_train)[-1], RMSE = rep(0,Npred)) #store values for RMSE for each variable
-#for (n in 2:ncol(data_train)) #loop over each predictor. For this to work, outcome must be in 1st column
-#{
- # fit1 <- train( as.formula(paste("fracinf ~",names(data_train)[n])) , data = data_train, method = "lm", trControl = fitControl) 
- #resultmat[n-1,2]= fit1$results$RMSE  
-#}
-#print(resultmat)
+set.seed(1111) #makes each code block reproducible
+
+fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
+Npred <- ncol(data_train)-1 # number of predictors
+resultmat <- data.frame(Variable = names(data_train)[-1], RMSE = rep(0,Npred)) #store values for RMSE for each variable
+
+for (n in 2:ncol(data_train)) #loop over each predictor. For this to work, outcome must be in 1st column
+{
+ fit1 <- train( as.formula(paste("fracinf ~",names(data_train)[n])) , data = data_train, method = "lm", trControl = fitControl) 
+ resultmat[n-1,2]= fit1$results$RMSE  
+}
+print(resultmat)
 ```
 
 This analysis shows 2 things that might need closer inspections. We get some error/warning messages, and most RMSE of the single-predictor models are not better than the null model. Usually, this is cause for more careful checking until you fully understand what is going on. But for this exercise, let's blindly press on!
@@ -465,6 +578,17 @@ Now let's perform fitting with multiple predictors. Use the same setup as the co
 set.seed(1111) #makes each code block reproducible
 #write code that uses the train function in caret to fit the outcome to all predictors using the 3 methods specified.
 #report the RMSE for each method. Note that knn and earth perform some model tuning (we'll discuss this soon) and report multiple RMSE. Use the lowest value.
+data_train
+
+
+fit1 <- train(fracinf ~ ., data= data_train, method= "lm", trControl= fitControl)
+fit2 <- train(fracinf ~ ., data= data_train, method= "earth", trControl= fitControl)
+fit3 <- train(fracinf ~ ., data= data_train, method= "knn", trControl= fitControl)
+
+
+print(fit1)
+print(fit2)
+print(fit3)
 ```
 
 So we find that some of these models do better than the null model and the single-predictor ones. KNN seems the best of those 3. Next, we want to see if pre-processing our data a bit more might lead to even better results.
@@ -479,7 +603,9 @@ First, we look at near-zero variance predictors. Those are predictors that have 
 Note that in general, one should apply all these processing steps to the training data only. Otherwise, you would use information from the test set to decide on data manipulations for all data (called data leakage). It is a bit hard to say when to make the train/test split. Above, we did a good bit of cleaning on the full dataset before we split. One could argue that one should split right at the start, then do the cleaning. However, this doesn't work for certain procedures (e.g., removing observations with NA). 
 
 ```{r}
-#write code using the caret function `nearZeroVar` to look at potential uninformative predictors. Set saveMetrics to TRUE. Look at the results 
+#write code using the caret function `nearZeroVar` to look at potential uninformative predictors. Set saveMetrics to TRUE. Look at the results
+
+nearZeroVar(data_train, saveMetrics=TRUE)
 ```
 
 You'll see that several variables are flagged as having near-zero variance. Look for instance at `Deaths`, you'll see that almost all outbreaks have zero deaths. It is a judgment call if we should remove all those flagged as near-zero-variance or not. For this exercise, we will.
@@ -487,6 +613,12 @@ You'll see that several variables are flagged as having near-zero variance. Look
 
 ```{r}
 #write code that removes all variables with near zero variance from the data 
+data_train <- data_train %>%
+  select(-c(Deaths, Hemisphere, Hospitalizations, MeanD1, MeanI1, MedianD1, MedianI1))
+
+#This worked just fine
+#data_train
+
 ```
 
 You should be left with 13 variables (including the outcome).
@@ -498,6 +630,18 @@ Next, we noticed during our exploratory analysis that it might be useful to cent
 ```{r processed-fit}
 #write code that repeats the multi-predictor fits from above, but this time applies centering and scaling of variables.
 #look at the RMSE for the new fits
+set.seed(1111)
+
+fit1 <- train(fracinf ~ ., data= data_train, method= "lm", trControl= fitControl, preProcess= c("center","scale"))
+
+fit2 <- train(fracinf ~ ., data= data_train, method= "earth", trControl= fitControl, preProcess= c("center","scale"))
+
+fit3 <- train(fracinf ~ ., data= data_train, method= "knn", trControl= fitControl, preProcess= c("center","scale"))
+
+print(fit1)
+print(fit2)
+print(fit3)
+              
 ```
 
 So it looks like the linear mode got a bit better, KNN actually got worse, and MARS didn't change much. Since for KNN, "the data is the model", removing some predictors might have had a detrimental impact. Though to say something more useful, I would want to look much closer into what's going on and if these pre-processing steps are useful or not. For this exercise, let's move on.
@@ -508,6 +652,17 @@ We can look at the uncertainty in model performance, e.g., the RMSE. Let's look 
 
 ```{r uncertainty}
 #Use the `resamples` function in caret to extract uncertainty from the 3 models fit to the data  that doesn't have predictor pre-processing, then plot it
+
+resamps <- resamples(list(Lm= fit1, earth= fit2, knn= fit3))
+
+difs <- diff(resamps)
+difs
+
+summary(difs)
+
+densityplot(difs)
+bwplot(difs)
+
 ```
 
 It seems that the model uncertainty for the outcome is fairly narrow for all models. We can (and in a real setting should) do further explorations to decide which model to choose. This is based part on what the model results are, and part on what we want. If we want a very simple, interpretable model, we'd likely use the linear model. If we want a model that has better performance, we might use MARS or - with the un-processed dataset - KNN.
@@ -520,6 +675,16 @@ For this exercise, let's just pick one model. We'll go with the best performing 
 ```{r}
 #Write code to get model predictions for the outcome on the training data, and plot it as function of actual outcome values.
 #also compute residuals (the difference between prediction and actual outcome) and plot that
+
+#fit3 is the knn model
+predictions <- predict(fit3, newdata= data_train, interval="confidence")
+
+add_predictions <- data_train %>%
+  mutate(predictions= predictions)
+#add_predictions
+
+ggplot(add_predictions, aes(predictions, data_train$fracinf)) + geom_point() + geom_smooth(method="lm")
+
 ```
 
 Both plots look ok, predicted vs. outcome is along the 45-degree line, and the residual plot shows no major pattern. Of course, for a real analysis, we would again want to dig a bit deeper. But we'll leave it at this for now. 
@@ -531,6 +696,16 @@ Let's do a final check, evaluate the performance of our final model on the test 
 
 ```{r}
 #Write code that computes model predictions and for test data, then compute SSR and RMSE.
+set.seed(1111)
+
+predictions_finalModel <- predict(fit3, newdata= data_test, interval="confidence")
+
+add_predictions_finalModel <- data_test %>%
+  mutate(Final_KNN_predictions= predictions_finalModel)
+#add_predictions_finalModel
+
+ggplot(add_predictions_finalModel, aes(predictions_finalModel, data_test$fracinf)) + geom_point() + geom_smooth(method="lm")
+
 ```
 
 Since we have a different number of observations, the result isn't expected to be quite the same as for the training data (despite dividing by sample size to account for that). But it's fairly close, and surprisingly not actually worse. So the KNN model seems to be reasonable at predicting. Now if its performance is 'good enough' is a scientific question.
