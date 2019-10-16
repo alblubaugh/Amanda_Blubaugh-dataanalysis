@@ -33,6 +33,8 @@ library('caret') #for model fitting
 library('earth')
 library('visdat')
 library('forcats')
+library('gtools')
+library('gridExtra')
 ```
 
 
@@ -240,9 +242,9 @@ Note that - as often happens for real data - there are inconsistencies between t
 #I am using useful_data, which already has those observations removed which are fracinf = Inf, leaving 579 observations. Now we will only select for those variables of interest.
 
 reduced_set <- useful_data %>%
-  dplyr::select(Action1, CasesAll, Category, Country, Deaths, gg2c4, Hemisphere, Hospitalizations, MeanA1, MeanD1, MeanI1, MedianA1, MedianD1, MedianI1, OBYear, Path1, RiskAll, season, Setting_1, Setting_2, Trans1, Vomit)
+  dplyr::select(Action1, CasesAll, Category, Country, Deaths, gg2c4, Hemisphere, Hospitalizations, MeanA1, MeanD1, MeanI1, MedianA1, MedianD1, MedianI1, OBYear, Path1, RiskAll, season, Setting_1, Setting_2, Trans1, Vomit, RateAll, fracinf)
 
-#Taking a look at how our variable number went from 140 to 22, still keeping the same 579 observations as before.
+#Taking a look at how our variable number went from 140 to 22+ 2 outcome variables(RateAll and fracinf), still keeping the same 579 observations as before.
 str(reduced_set)
 summary(reduced_set)
 
@@ -274,9 +276,12 @@ It looks like we have a lot of missing data for the `MeanA1` and `MedianA1` vari
 # write code to remove the 2 "A1" variables, then drop all remaining observations with NA
 
 refined_set <- reduced_set %>%
-  dplyr::select(Action1, CasesAll, Category, Country, Deaths, gg2c4, Hemisphere, Hospitalizations, MeanD1, MeanI1, MedianD1, MedianI1, OBYear, Path1, RiskAll, season, Setting_1, Setting_2, Trans1, Vomit)
+  dplyr::select(Action1, CasesAll, Category, Country, Deaths, gg2c4, Hemisphere, Hospitalizations, MeanD1, MeanI1, MedianD1, MedianI1, OBYear, Path1, RiskAll, season, Setting_1, Setting_2, Trans1, Vomit, RateAll, fracinf)
 
-# Now we are down to 20 variables of interest
+#drop all observations with missing data (the hospitalizations and deaths)
+refined_set <- na.omit(refined_set)
+
+# Now we are down to 22 variables of interest
 str(refined_set)
 summary(refined_set)
 ```
@@ -306,22 +311,33 @@ head(levels(refined_set$Setting_1))
 
 # So many levels! 388 different answers
 
-#I played around with this for a long time trying to figure out how to use fct_collapse or another function in Factors to solve this issue, like fct_lump. Moved on.
-final_set <- refined_set %>%
-  mutate(Setting = fct_collapse(Setting_1, Restaurant = c("restaurant","Restaurant"), group_other= TRUE))
+#I played around with this for a long time trying to figure out how to use mutate with fct_collapse or another function in Factors to solve this issue, like fct_lump. Moved on and did subset, which got me 104 pulled restaurants out of the data. Also more briefly tried an awkward grep code for uppercase and lowercase Setting_1 restaurant tags
 
-# This adds Setting, but isn't accruately finding restaurant in the factor levels.
-#Use grep to get those rows that should be in the restaurant category
+#here is what worked for me to label the restaurants
+restaurant_settings <- subset(refined_set, Setting_1 == "restaurant" | Setting_1 == "Restaurant")
+other_settings <- subset(refined_set, Setting_1 != "restaurant" & Setting_1 != "Restaurant")
 
-shouldBerestaurant <- grep("restaurant" , final_set$Setting_1)
-shouldBeRestaurant <- grep("Restaurant" , final_set$Setting_1)
-shouldbePos <- combine(shouldBerestaurant,shouldBeRestaurant)
+restaurant_settings_edit <- restaurant_settings %>%
+  mutate(Setting = "Restaurant") %>%
+  select(-c(Setting_1, Setting_2))
+  
+other_settings_edit <- other_settings %>%
+  mutate(Setting = "Other") %>%
+  select(-c(Setting_1, Setting_2))
+  
+#here I incorporated gtools (library loaded at top) to use smartbind and paste both of my subsets together. It appears to have worked, as I am back with 579 rows again. Let's glance and see...
+final_draft <- smartbind(restaurant_settings_edit,other_settings_edit)
+str(final_draft)
 
-# This identifies the rows that should have Restaurant marked as their level in the new Setting factor
-shouldbePos
+ggplot(refined_set, aes(Setting_1, CasesAll)) + geom_point()
+ggplot(final_draft, aes(Setting, CasesAll)) + geom_point()
 
-# We know the 3rd, 5th, and 7th rows of observations have to do with restaurant in the Setting_1 variable, so we can see if our equation above worked to change those Setting factor levels to the correct level.
+# The plots above are looking interesting.  Total number of suspected cases and total RateAll accross all observations is the same in both the refined set with Setting_1 and Setting_2 and the final_draft with only Setting: Restaurant or Other
+sum(refined_set$CasesAll)
+sum(final_draft$CasesAll)
 
+if(sum(refined_set$RateAll) == sum(refined_set$RateAll))
+  print("Yay!")
 
 ```
 
@@ -333,8 +349,16 @@ Next, let's create a few plots showing the outcome and the predictors.
 
 
 ```{r plots-1}
-#write code that produces plots showing our outcome of interest on the y-axis and each numeric predictor on the x-axis.
+#write code that produces plots showing our outcome of interest on the y-axis and each numeric predictor on the x-axis. (MeanD1, MedianD1, RiskAll)
 #you can use the facet_wrap functionality in ggplot for it, or do it some other way.
+
+#The preliminary graphs above show that maybe other locations besides restaurants had a lower total number of suspected cases. That was just fun. Let's see what these show.
+
+#played with gridExtra here. library loaded at the top
+ggplot(final_draft, aes(RiskAll, RateAll)) + geom_point()-> p1
+ggplot(final_draft, aes(MedianD1, RateAll)) + geom_point() -> p2
+ggplot(final_draft, aes(MeanD1, RateAll)) + geom_point() -> p3
+grid.arrange(p1, p2, p3, ncol=3)
 ```
 
 One thing I notice in the plots is that there are lots of zeros for many predictors and things look skewed. That's ok, but means we should probably standardize these predictors. One strange finding (that I could have caught further up when printing the numeric summaries, but didn't) is that there is (at least) one outbreak that has outbreak year reported as 0. That is, of course, wrong and needs to be fixed. There are different ways of fixing it, the best, of course, would be to trace it back and try to fix it with the right value. We won't do that here. Instead, we'll remove that observation.
