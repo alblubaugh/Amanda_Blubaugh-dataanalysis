@@ -216,7 +216,7 @@ added_column
 added_column %>%
   filter(fracinf == 'Inf')
 
-# This makes sense. 1022- 323 = 699? We have 579 left. Hmm...
+# This makes sense. filtering data that has Inf, and those that don't, yeild two equal groups
 useful_data <- added_column %>%
   filter(fracinf != 'Inf')
 
@@ -507,7 +507,7 @@ putFracinfFirst <- removeRateAll %>%
 
 final_draft <- putFracinfFirst
 
-final_draft
+#final_draft
 ```
 # Model fitting
 
@@ -683,7 +683,13 @@ add_predictions <- data_train %>%
   mutate(predictions= predictions)
 #add_predictions
 
+train_residuals <- residuals(fit3)
+
+#plot and look at RSME
 ggplot(add_predictions, aes(predictions, data_train$fracinf)) + geom_point() + geom_smooth(method="lm")
+RMSE(predictions, data_train$fracinf)
+
+ggplot(add_predictions, aes(predictions, train_residuals)) + geom_point() + geom_smooth(method="lm")
 
 ```
 
@@ -705,6 +711,14 @@ add_predictions_finalModel <- data_test %>%
 #add_predictions_finalModel
 
 ggplot(add_predictions_finalModel, aes(predictions_finalModel, data_test$fracinf)) + geom_point() + geom_smooth(method="lm")
+
+#RMSE here= 26.68. Still better than null at least.
+RMSE(data_test$fracinf, predictions_finalModel)
+
+#Sum of square residuals
+residuals <- residuals(fit3)
+sum(residuals*residuals)
+
 
 ```
 
