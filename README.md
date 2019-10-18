@@ -1,6 +1,6 @@
 # Overview
 
-[This is the repository for Amanda Blubaugh's Data Analysis Exercise]( https://epid8060fall2019.github.io/Amanda_Blubaugh-dataanalysis-exercise/
+[This is the repository for Amanda Blubaugh's Data Analysis Exercise]( https://epid8060fall2019.github.io/Amanda_Blubaugh-dataanalysis/
 )
 
 
