@@ -7,5 +7,4 @@ output:
 
 Amanda Blubaugh (alblub@uga.edu)
 
-If you want to learn more about me or my lab, you can visit [Banovic Labs](https://banoviclabs.github.io/Banovic_Lab/).
-
+If you want to learn more about me or my lab, please visit [Banovic Labs](https://banoviclabs.github.io/Banovic_Lab/).
