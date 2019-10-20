@@ -280,7 +280,7 @@ gg2c4_first <- unknown_season %>%
   select(gg2c4, everything())
 
 summary(gg2c4_first)
-gg2c4_first
+#gg2c4_first
 
 ```
 
@@ -457,6 +457,7 @@ Using this approach, a model is evaluated based on the Area under the curve (AUC
 # Model performance with AUC
 
 ```{r nullmodel-auc}
+
 #write code that computes AUC for a null model
 #the null model always predicts "No"
 #the auc function in the pROC package is useful
@@ -464,22 +465,19 @@ Using this approach, a model is evaluated based on the Area under the curve (AUC
 
 #I went ahead and downloaded, installed, and loaded package with other libraries above for pROC. Let's try it out.
 
-for_roc <- gg2c4_first
-
 null_numeric <- numeric()
 for (i in 1:850)
   null_numeric[i] = 0
 
-for_roc %>%
+number_roc <- gg2c4_first %>%
   mutate(gg2c4= fct_recode(gg2c4, "1" = "Yes", "0" = "No"))
 
-binary_roc <- as.numeric(for_roc$gg2c4)
-#binary_roc
+binary_roc <- as.numeric(number_roc$gg2c4)
 
 roc_null <- roc(binary_roc, null_numeric)
-plot(roc_null)
 
 auc_null <- auc(roc_null)
+plot(auc_null)
 
 ```
 
@@ -494,11 +492,12 @@ Now we run the single-predictor models again.
 
 set.seed(1111) #makes each code block reproducible
 
+# I played around a lot in this section to learn the ins and outs of using learners and implementing different algorithms
 #outcome <- gg2c4_first$gg2c4 
 #outcomename = "gg2c4"
 #predictors <- gg2c4_first[,-1]
 
-gg2c4_first
+#gg2c4_first
 
 #subset_negative <- gg2c4_first %>%
 #  mutate(gg2c4= fct_recode(gg2c4, '1' ="No", '0' = "Yes"))
@@ -513,10 +512,10 @@ subset_negative <- gg2c4_first %>%
 subset_positive <- gg2c4_first %>%
   filter(gg2c4 == "Yes")
 
-subset_negative
-subset_positive
+#subset_negative
+#subset_positive
 
-predictors
+#predictors
 
 roc <- (gg2c4_first$gg2c4)
 roc <- as.list(roc)
@@ -628,7 +627,7 @@ While this is a common measure and useful to evaluate how models perform at diff
 ```{r roc-plot}
 set.seed(1111) #makes each code block reproducible
 d2 <- gg2c4_first %>% dplyr::select(gg2c4, sfeatga_res$x )
-d2
+#d2
 mytask = makeClassifTask(id='rocanalysis', data = d2, target = outcomename, positive = "Yes")
 mytask
 mylearner
