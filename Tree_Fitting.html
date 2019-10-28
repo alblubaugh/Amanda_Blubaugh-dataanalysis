@@ -1192,7 +1192,9 @@ div.tocify {
 <p>We’ll have to perform the usual cleaning steps. You might have realized by now that even for the same dataset, cleaning steps can differ based on the outcome (and as you see below, the model).</p>
 <p>Let’s first check for missing values.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="co"># write code that looks at missing values</span></a>
-<a class="sourceLine" id="cb18-2" title="2"><span class="kw">is.na</span>(picked_variables)</a></code></pre></div>
+<a class="sourceLine" id="cb18-2" title="2"></a>
+<a class="sourceLine" id="cb18-3" title="3"><span class="co"># I think I am overthinking this, and I don&#39;t think this is correct.</span></a>
+<a class="sourceLine" id="cb18-4" title="4"><span class="kw">is.na</span>(picked_variables)</a></code></pre></div>
 <pre><code>##      Action1 CasesAll Country Deaths EndMonth gg2c4 Hemisphere
 ## 1      FALSE    FALSE   FALSE  FALSE    FALSE FALSE      FALSE
 ## 2      FALSE    FALSE   FALSE  FALSE    FALSE FALSE      FALSE
@@ -4381,15 +4383,17 @@ div.tocify {
 <p>Things look ok, apart from the skew in the predictors we discussed previously.</p>
 <p>Next, let’s create plots for the categorical variables. You can use, for instance, <code>geom_count</code> for it, or some other representation. If you prefer lots of tables, that’s ok too.</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="co">#write code that produces plots or tables showing our outcome of interest and each categorical predictor.</span></a>
-<a class="sourceLine" id="cb53-2" title="2">p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Action1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-3" title="3">p6 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Path1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-4" title="4">p7 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Setting)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-5" title="5">p8 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Hemisphere)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-6" title="6">p9 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Country)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-7" title="7">p10 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Trans1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-8" title="8">p11 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, season)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-9" title="9"></a>
-<a class="sourceLine" id="cb53-10" title="10"><span class="kw">grid.arrange</span>(p5, p6, p7, p8, p9, p10, p11, <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">widths=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="fl">1.15</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb53-2" title="2"></a>
+<a class="sourceLine" id="cb53-3" title="3"><span class="co"># I still need to fix these up a bit</span></a>
+<a class="sourceLine" id="cb53-4" title="4">p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Action1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb53-5" title="5">p6 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Path1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb53-6" title="6">p7 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Setting)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb53-7" title="7">p8 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Hemisphere)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb53-8" title="8">p9 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Country)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb53-9" title="9">p10 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Trans1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb53-10" title="10">p11 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, season)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb53-11" title="11"></a>
+<a class="sourceLine" id="cb53-12" title="12"><span class="kw">grid.arrange</span>(p5, p6, p7, p8, p9, p10, p11, <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">widths=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="fl">1.15</span>))</a></code></pre></div>
 <p><img src="Tree_Fitting_files/figure-html/plots-2-1.png" width="672" /></p>
 <p>Looks ok. Notice the NA for vomiting. We are ok with that for now.</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="kw">dim</span>(season_first)</a></code></pre></div>
@@ -4687,585 +4691,26 @@ div.tocify {
 <a class="sourceLine" id="cb97-9" title="9"><span class="co">#add_predictions</span></a>
 <a class="sourceLine" id="cb97-10" title="10"></a>
 <a class="sourceLine" id="cb97-11" title="11"></a>
-<a class="sourceLine" id="cb97-12" title="12">accuracy &lt;-<span class="st"> </span>(<span class="kw">nrow</span>(add_predictions))</a>
-<a class="sourceLine" id="cb97-13" title="13"></a>
-<a class="sourceLine" id="cb97-14" title="14"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(add_predictions)){ </a>
-<a class="sourceLine" id="cb97-15" title="15">  <span class="cf">if</span> (add_predictions<span class="op">$</span>season[i] <span class="op">==</span><span class="st"> </span>add_predictions<span class="op">$</span>predictions[i])</a>
-<a class="sourceLine" id="cb97-16" title="16">    accuracy[i] =<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb97-17" title="17">  <span class="cf">else</span></a>
-<a class="sourceLine" id="cb97-18" title="18">    accuracy[i] =<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb97-19" title="19">}</a>
-<a class="sourceLine" id="cb97-20" title="20"></a>
-<a class="sourceLine" id="cb97-21" title="21">accuracy_table &lt;-<span class="st"> </span>data_train_mod <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb97-22" title="22"><span class="st">  </span><span class="kw">transmute</span>(season, predictions, accuracy)</a>
-<a class="sourceLine" id="cb97-23" title="23"></a>
-<a class="sourceLine" id="cb97-24" title="24">accuracy_table</a></code></pre></div>
-<pre><code>##     season predictions accuracy
-## 1     Fall        Fall        1
-## 2     Fall        Fall        1
-## 3     Fall      Winter        0
-## 4     Fall      Winter        0
-## 5     Fall        Fall        1
-## 6     Fall      Winter        0
-## 7     Fall      Winter        0
-## 8     Fall      Winter        0
-## 9     Fall      Winter        0
-## 10    Fall      Winter        0
-## 11    Fall      Winter        0
-## 12    Fall        Fall        1
-## 13    Fall        Fall        1
-## 14    Fall        Fall        1
-## 15  Spring      Winter        0
-## 16  Spring      Spring        1
-## 17  Spring      Winter        0
-## 18  Spring      Winter        0
-## 19  Spring      Winter        0
-## 20  Spring      Winter        0
-## 21  Spring      Winter        0
-## 22  Spring      Winter        0
-## 23  Spring      Winter        0
-## 24  Spring      Winter        0
-## 25  Spring      Winter        0
-## 26  Spring      Winter        0
-## 27  Spring      Winter        0
-## 28  Spring      Winter        0
-## 29  Spring      Winter        0
-## 30  Spring      Winter        0
-## 31  Spring      Winter        0
-## 32  Spring      Winter        0
-## 33  Spring      Winter        0
-## 34  Spring      Winter        0
-## 35  Spring      Winter        0
-## 36  Spring      Winter        0
-## 37  Spring      Winter        0
-## 38  Spring      Winter        0
-## 39  Spring      Winter        0
-## 40  Spring      Winter        0
-## 41  Spring      Winter        0
-## 42  Spring      Winter        0
-## 43  Spring      Winter        0
-## 44  Spring      Spring        1
-## 45  Summer      Winter        0
-## 46  Summer      Winter        0
-## 47  Summer      Winter        0
-## 48  Summer      Winter        0
-## 49  Summer      Winter        0
-## 50  Summer      Winter        0
-## 51  Summer      Summer        1
-## 52  Summer      Winter        0
-## 53  Winter      Winter        1
-## 54  Winter      Winter        1
-## 55  Winter      Winter        1
-## 56  Winter      Winter        1
-## 57  Winter      Winter        1
-## 58  Winter      Winter        1
-## 59  Winter      Winter        1
-## 60  Winter      Winter        1
-## 61  Winter      Winter        1
-## 62  Winter      Winter        1
-## 63  Winter      Winter        1
-## 64  Winter      Winter        1
-## 65  Winter      Winter        1
-## 66  Winter      Winter        1
-## 67  Winter      Winter        1
-## 68  Winter      Winter        1
-## 69  Winter      Winter        1
-## 70  Winter      Winter        1
-## 71  Winter      Winter        1
-## 72  Winter      Winter        1
-## 73  Winter      Winter        1
-## 74  Winter      Winter        1
-## 75  Winter      Winter        1
-## 76  Winter      Winter        1
-## 77  Winter      Winter        1
-## 78  Winter      Winter        1
-## 79  Winter      Winter        1
-## 80  Winter      Winter        1
-## 81  Winter      Winter        1
-## 82  Winter      Winter        1
-## 83  Winter      Winter        1
-## 84  Winter      Winter        1
-## 85  Winter      Winter        1
-## 86  Winter      Winter        1
-## 87  Winter      Winter        1
-## 88  Winter      Winter        1
-## 89  Winter      Winter        1
-## 90  Winter      Winter        1
-## 91  Winter      Winter        1
-## 92  Winter      Winter        1
-## 93  Winter      Winter        1
-## 94  Winter      Winter        1
-## 95  Winter      Winter        1
-## 96  Winter      Winter        1
-## 97  Winter      Winter        1
-## 98  Winter      Winter        1
-## 99  Winter      Winter        1
-## 100 Winter      Winter        1
-## 101 Winter      Winter        1
-## 102 Winter      Winter        1
-## 103 Winter      Winter        1
-## 104 Winter      Winter        1
-## 105 Winter      Winter        1
-## 106 Winter      Winter        1
-## 107 Winter      Winter        1
-## 108 Winter      Winter        1
-## 109 Winter      Winter        1
-## 110 Winter      Winter        1
-## 111 Winter      Winter        1
-## 112 Winter      Winter        1
-## 113 Winter      Winter        1
-## 114 Winter      Winter        1
-## 115   Fall      Winter        0
-## 116   Fall        Fall        1
-## 117   Fall      Winter        0
-## 118   Fall      Spring        0
-## 119   Fall      Winter        0
-## 120   Fall        Fall        1
-## 121   Fall        Fall        1
-## 122   Fall        Fall        1
-## 123   Fall        Fall        1
-## 124   Fall        Fall        1
-## 125   Fall        Fall        1
-## 126   Fall        Fall        1
-## 127   Fall        Fall        1
-## 128   Fall        Fall        1
-## 129   Fall        Fall        1
-## 130   Fall        Fall        1
-## 131   Fall        Fall        1
-## 132   Fall        Fall        1
-## 133   Fall        Fall        1
-## 134   Fall        Fall        1
-## 135   Fall        Fall        1
-## 136   Fall        Fall        1
-## 137   Fall      Winter        0
-## 138   Fall        Fall        1
-## 139   Fall      Winter        0
-## 140   Fall      Winter        0
-## 141   Fall      Winter        0
-## 142   Fall        Fall        1
-## 143   Fall        Fall        1
-## 144   Fall      Winter        0
-## 145   Fall      Winter        0
-## 146   Fall      Winter        0
-## 147   Fall      Winter        0
-## 148   Fall      Winter        0
-## 149   Fall      Winter        0
-## 150   Fall        Fall        1
-## 151   Fall        Fall        1
-## 152   Fall        Fall        1
-## 153   Fall      Winter        0
-## 154   Fall      Winter        0
-## 155   Fall      Winter        0
-## 156   Fall      Winter        0
-## 157   Fall      Winter        0
-## 158   Fall        Fall        1
-## 159   Fall      Winter        0
-## 160   Fall      Winter        0
-## 161   Fall      Winter        0
-## 162   Fall      Winter        0
-## 163   Fall      Winter        0
-## 164   Fall      Winter        0
-## 165   Fall        Fall        1
-## 166   Fall      Winter        0
-## 167   Fall      Winter        0
-## 168   Fall      Winter        0
-## 169   Fall        Fall        1
-## 170   Fall        Fall        1
-## 171   Fall      Winter        0
-## 172   Fall        Fall        1
-## 173   Fall      Winter        0
-## 174   Fall        Fall        1
-## 175   Fall        Fall        1
-## 176   Fall        Fall        1
-## 177   Fall      Winter        0
-## 178   Fall        Fall        1
-## 179   Fall      Winter        0
-## 180   Fall        Fall        1
-## 181   Fall        Fall        1
-## 182   Fall        Fall        1
-## 183   Fall      Winter        0
-## 184   Fall        Fall        1
-## 185   Fall        Fall        1
-## 186   Fall        Fall        1
-## 187   Fall        Fall        1
-## 188   Fall        Fall        1
-## 189   Fall      Winter        0
-## 190   Fall      Winter        0
-## 191   Fall      Winter        0
-## 192   Fall      Winter        0
-## 193   Fall      Winter        0
-## 194   Fall        Fall        1
-## 195   Fall        Fall        1
-## 196 Spring      Spring        1
-## 197 Spring      Spring        1
-## 198 Spring      Winter        0
-## 199 Spring      Spring        1
-## 200 Spring      Summer        0
-## 201 Spring      Winter        0
-## 202 Spring      Spring        1
-## 203 Spring      Winter        0
-## 204 Spring      Winter        0
-## 205 Spring      Spring        1
-## 206 Spring      Spring        1
-## 207 Spring      Spring        1
-## 208 Spring      Winter        0
-## 209 Spring      Spring        1
-## 210 Spring        Fall        0
-## 211 Spring        Fall        0
-## 212 Spring      Winter        0
-## 213 Spring      Winter        0
-## 214 Spring      Winter        0
-## 215 Spring      Winter        0
-## 216 Spring      Winter        0
-## 217 Spring      Winter        0
-## 218 Spring      Winter        0
-## 219 Spring      Winter        0
-## 220 Spring      Winter        0
-## 221 Spring      Winter        0
-## 222 Spring      Winter        0
-## 223 Spring      Winter        0
-## 224 Spring      Winter        0
-## 225 Spring      Spring        1
-## 226 Spring      Spring        1
-## 227 Spring      Spring        1
-## 228 Spring      Spring        1
-## 229 Spring      Spring        1
-## 230 Spring      Spring        1
-## 231 Spring      Spring        1
-## 232 Spring      Winter        0
-## 233 Spring      Spring        1
-## 234 Spring      Spring        1
-## 235 Spring      Winter        0
-## 236 Spring      Winter        0
-## 237 Spring      Winter        0
-## 238 Spring      Winter        0
-## 239 Spring      Winter        0
-## 240 Spring      Winter        0
-## 241 Spring      Winter        0
-## 242 Spring      Spring        1
-## 243 Spring      Spring        1
-## 244 Spring      Spring        1
-## 245 Spring      Winter        0
-## 246 Spring      Spring        1
-## 247 Spring      Winter        0
-## 248 Spring      Winter        0
-## 249 Spring      Winter        0
-## 250 Spring      Winter        0
-## 251 Spring      Winter        0
-## 252 Spring      Winter        0
-## 253 Spring      Winter        0
-## 254 Spring      Winter        0
-## 255 Spring      Spring        1
-## 256 Spring      Spring        1
-## 257 Spring      Winter        0
-## 258 Spring      Winter        0
-## 259 Spring      Winter        0
-## 260 Spring      Spring        1
-## 261 Spring      Winter        0
-## 262 Spring      Spring        1
-## 263 Spring      Winter        0
-## 264 Spring      Winter        0
-## 265 Spring      Winter        0
-## 266 Spring      Winter        0
-## 267 Spring      Winter        0
-## 268 Spring      Spring        1
-## 269 Spring      Winter        0
-## 270 Spring      Spring        1
-## 271 Spring      Winter        0
-## 272 Spring      Winter        0
-## 273 Spring      Winter        0
-## 274 Spring      Winter        0
-## 275 Spring      Winter        0
-## 276 Spring      Winter        0
-## 277 Spring      Winter        0
-## 278 Spring      Winter        0
-## 279 Spring      Winter        0
-## 280 Spring      Winter        0
-## 281 Spring      Spring        1
-## 282 Spring      Spring        1
-## 283 Spring      Spring        1
-## 284 Spring      Summer        0
-## 285 Spring      Spring        1
-## 286 Spring      Spring        1
-## 287 Spring      Spring        1
-## 288 Spring      Spring        1
-## 289 Spring      Spring        1
-## 290 Spring      Spring        1
-## 291 Spring      Spring        1
-## 292 Spring      Spring        1
-## 293 Spring      Winter        0
-## 294 Spring      Winter        0
-## 295 Spring      Spring        1
-## 296 Spring      Spring        1
-## 297 Spring      Spring        1
-## 298 Spring      Spring        1
-## 299 Spring      Winter        0
-## 300 Summer      Winter        0
-## 301 Summer      Summer        1
-## 302 Summer      Winter        0
-## 303 Summer      Winter        0
-## 304 Summer      Summer        1
-## 305 Summer      Summer        1
-## 306 Summer      Winter        0
-## 307 Summer      Summer        1
-## 308 Summer      Winter        0
-## 309 Summer      Winter        0
-## 310 Summer      Winter        0
-## 311 Summer      Summer        1
-## 312 Summer      Summer        1
-## 313 Summer      Winter        0
-## 314 Summer      Winter        0
-## 315 Summer      Summer        1
-## 316 Summer      Summer        1
-## 317 Summer      Winter        0
-## 318 Summer      Winter        0
-## 319 Summer      Winter        0
-## 320 Summer      Winter        0
-## 321 Summer      Winter        0
-## 322 Summer      Winter        0
-## 323 Summer      Winter        0
-## 324 Summer      Summer        1
-## 325 Summer      Summer        1
-## 326 Summer      Summer        1
-## 327 Summer      Summer        1
-## 328 Summer      Winter        0
-## 329 Summer      Winter        0
-## 330 Summer      Winter        0
-## 331 Summer      Winter        0
-## 332 Summer      Summer        1
-## 333 Summer      Winter        0
-## 334 Summer      Winter        0
-## 335 Summer      Winter        0
-## 336 Summer      Summer        1
-## 337 Summer      Summer        1
-## 338 Summer      Summer        1
-## 339 Summer      Summer        1
-## 340 Summer      Winter        0
-## 341 Summer      Summer        1
-## 342 Summer      Summer        1
-## 343 Summer      Winter        0
-## 344 Summer      Winter        0
-## 345 Summer      Winter        0
-## 346 Summer      Summer        1
-## 347 Summer      Summer        1
-## 348 Summer      Summer        1
-## 349 Summer      Summer        1
-## 350 Summer      Summer        1
-## 351 Summer      Summer        1
-## 352 Summer      Summer        1
-## 353 Summer      Summer        1
-## 354 Summer      Winter        0
-## 355 Summer      Summer        1
-## 356 Summer      Summer        1
-## 357 Summer      Summer        1
-## 358 Summer      Summer        1
-## 359 Summer      Winter        0
-## 360 Summer      Summer        1
-## 361 Summer      Summer        1
-## 362 Summer      Winter        0
-## 363 Summer      Summer        1
-## 364 Winter      Winter        1
-## 365 Winter      Winter        1
-## 366 Winter      Winter        1
-## 367 Winter      Winter        1
-## 368 Winter      Winter        1
-## 369 Winter      Winter        1
-## 370 Winter      Winter        1
-## 371 Winter      Winter        1
-## 372 Winter      Winter        1
-## 373 Winter      Winter        1
-## 374 Winter      Winter        1
-## 375 Winter      Winter        1
-## 376 Winter      Winter        1
-## 377 Winter      Winter        1
-## 378 Winter      Winter        1
-## 379 Winter      Winter        1
-## 380 Winter      Winter        1
-## 381 Winter      Winter        1
-## 382 Winter        Fall        0
-## 383 Winter      Winter        1
-## 384 Winter      Winter        1
-## 385 Winter      Winter        1
-## 386 Winter      Winter        1
-## 387 Winter      Winter        1
-## 388 Winter      Winter        1
-## 389 Winter      Winter        1
-## 390 Winter      Winter        1
-## 391 Winter      Winter        1
-## 392 Winter      Winter        1
-## 393 Winter      Winter        1
-## 394 Winter      Winter        1
-## 395 Winter      Winter        1
-## 396 Winter      Winter        1
-## 397 Winter      Winter        1
-## 398 Winter      Winter        1
-## 399 Winter      Winter        1
-## 400 Winter      Winter        1
-## 401 Winter      Winter        1
-## 402 Winter      Winter        1
-## 403 Winter      Winter        1
-## 404 Winter      Winter        1
-## 405 Winter      Winter        1
-## 406 Winter      Winter        1
-## 407 Winter      Winter        1
-## 408 Winter      Winter        1
-## 409 Winter      Winter        1
-## 410 Winter      Winter        1
-## 411 Winter      Winter        1
-## 412 Winter      Winter        1
-## 413 Winter      Winter        1
-## 414 Winter      Winter        1
-## 415 Winter      Winter        1
-## 416 Winter      Winter        1
-## 417 Winter      Winter        1
-## 418 Winter      Winter        1
-## 419 Winter      Winter        1
-## 420 Winter      Winter        1
-## 421 Winter      Winter        1
-## 422 Winter      Winter        1
-## 423 Winter      Winter        1
-## 424 Winter      Winter        1
-## 425 Winter      Winter        1
-## 426 Winter      Winter        1
-## 427 Winter      Winter        1
-## 428 Winter      Winter        1
-## 429 Winter      Winter        1
-## 430 Winter      Winter        1
-## 431 Winter      Winter        1
-## 432 Winter      Winter        1
-## 433 Winter      Winter        1
-## 434 Winter      Winter        1
-## 435 Winter      Winter        1
-## 436 Winter      Winter        1
-## 437 Winter      Winter        1
-## 438 Winter      Winter        1
-## 439 Winter      Winter        1
-## 440 Winter      Winter        1
-## 441 Winter      Winter        1
-## 442 Winter      Winter        1
-## 443 Winter      Winter        1
-## 444 Winter      Winter        1
-## 445 Winter      Winter        1
-## 446 Winter      Winter        1
-## 447 Winter      Winter        1
-## 448 Winter      Winter        1
-## 449 Winter      Winter        1
-## 450 Winter      Winter        1
-## 451 Winter      Winter        1
-## 452 Winter      Winter        1
-## 453 Winter      Winter        1
-## 454 Winter      Winter        1
-## 455 Winter      Winter        1
-## 456 Winter      Winter        1
-## 457 Winter      Winter        1
-## 458 Winter      Winter        1
-## 459 Winter      Winter        1
-## 460 Winter      Winter        1
-## 461 Winter      Winter        1
-## 462 Winter      Winter        1
-## 463 Winter      Winter        1
-## 464 Winter      Winter        1
-## 465 Winter      Winter        1
-## 466 Winter      Winter        1
-## 467 Winter      Winter        1
-## 468 Winter      Winter        1
-## 469 Winter      Winter        1
-## 470 Winter      Winter        1
-## 471 Winter      Winter        1
-## 472 Winter      Winter        1
-## 473 Winter      Winter        1
-## 474 Winter      Winter        1
-## 475 Winter      Winter        1
-## 476 Winter      Winter        1
-## 477 Winter      Winter        1
-## 478 Winter      Winter        1
-## 479 Winter      Winter        1
-## 480 Winter      Winter        1
-## 481 Winter      Winter        1
-## 482 Winter      Winter        1
-## 483 Winter      Winter        1
-## 484 Winter      Winter        1
-## 485 Winter      Winter        1
-## 486 Winter      Winter        1
-## 487 Winter      Winter        1
-## 488 Winter      Winter        1
-## 489 Winter      Winter        1
-## 490 Winter      Winter        1
-## 491 Winter      Winter        1
-## 492 Winter      Winter        1
-## 493 Winter      Winter        1
-## 494 Winter      Winter        1
-## 495 Winter      Winter        1
-## 496 Winter      Winter        1
-## 497 Winter      Winter        1
-## 498 Winter      Winter        1
-## 499 Winter      Winter        1
-## 500 Winter      Winter        1
-## 501 Winter      Winter        1
-## 502 Winter      Winter        1
-## 503 Winter      Winter        1
-## 504 Winter      Winter        1
-## 505 Winter      Winter        1
-## 506 Winter      Winter        1
-## 507 Winter      Winter        1
-## 508 Winter      Winter        1
-## 509 Winter      Winter        1
-## 510 Winter      Winter        1
-## 511 Winter      Winter        1
-## 512 Winter      Winter        1
-## 513 Winter      Winter        1
-## 514 Winter      Winter        1
-## 515 Winter      Winter        1
-## 516 Winter      Winter        1
-## 517 Winter      Winter        1
-## 518 Winter      Winter        1
-## 519 Winter      Winter        1
-## 520 Winter      Winter        1
-## 521 Winter      Winter        1
-## 522 Winter      Winter        1
-## 523 Winter      Winter        1
-## 524 Winter      Winter        1
-## 525 Winter      Winter        1
-## 526 Winter      Winter        1
-## 527 Winter      Winter        1
-## 528 Winter      Winter        1
-## 529 Winter      Winter        1
-## 530 Winter      Winter        1
-## 531 Winter      Winter        1
-## 532 Winter      Winter        1
-## 533 Winter      Winter        1
-## 534 Winter      Winter        1
-## 535 Winter      Winter        1
-## 536 Winter      Winter        1
-## 537 Winter      Winter        1
-## 538 Winter      Winter        1
-## 539 Winter      Winter        1
-## 540 Winter      Winter        1
-## 541 Winter      Winter        1
-## 542 Winter      Winter        1
-## 543 Winter      Winter        1
-## 544 Winter      Winter        1
-## 545 Winter      Winter        1
-## 546 Winter      Winter        1
-## 547 Winter      Winter        1
-## 548 Winter      Winter        1
-## 549 Winter      Winter        1
-## 550 Winter      Winter        1
-## 551 Winter      Winter        1
-## 552 Winter      Winter        1
-## 553 Winter      Winter        1
-## 554 Winter      Winter        1
-## 555 Winter      Winter        1
-## 556 Winter      Winter        1
-## 557 Winter      Winter        1
-## 558 Winter      Winter        1
-## 559 Winter      Winter        1
-## 560 Winter      Winter        1</code></pre>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1">total_accuracy &lt;-<span class="st"> </span><span class="kw">sum</span>(accuracy_table<span class="op">$</span>accuracy<span class="op">/</span><span class="kw">nrow</span>(accuracy_table))</a>
-<a class="sourceLine" id="cb99-2" title="2"></a>
-<a class="sourceLine" id="cb99-3" title="3">total_accuracy</a></code></pre></div>
+<a class="sourceLine" id="cb97-12" title="12"><span class="co">#I went ahead and created a manual calculation of accuracy before calling confusion matrix to see if I got the same thing.  And yay, I do!</span></a>
+<a class="sourceLine" id="cb97-13" title="13">accuracy &lt;-<span class="st"> </span>(<span class="kw">nrow</span>(add_predictions))</a>
+<a class="sourceLine" id="cb97-14" title="14"></a>
+<a class="sourceLine" id="cb97-15" title="15"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(add_predictions)){ </a>
+<a class="sourceLine" id="cb97-16" title="16">  <span class="cf">if</span> (add_predictions<span class="op">$</span>season[i] <span class="op">==</span><span class="st"> </span>add_predictions<span class="op">$</span>predictions[i])</a>
+<a class="sourceLine" id="cb97-17" title="17">    accuracy[i] =<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb97-18" title="18">  <span class="cf">else</span></a>
+<a class="sourceLine" id="cb97-19" title="19">    accuracy[i] =<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb97-20" title="20">}</a>
+<a class="sourceLine" id="cb97-21" title="21"></a>
+<a class="sourceLine" id="cb97-22" title="22">accuracy_table &lt;-<span class="st"> </span>data_train_mod <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb97-23" title="23"><span class="st">  </span><span class="kw">transmute</span>(season, predictions, accuracy)</a>
+<a class="sourceLine" id="cb97-24" title="24"></a>
+<a class="sourceLine" id="cb97-25" title="25"><span class="co">#accuracy_table</span></a>
+<a class="sourceLine" id="cb97-26" title="26"></a>
+<a class="sourceLine" id="cb97-27" title="27">total_accuracy &lt;-<span class="st"> </span><span class="kw">sum</span>(accuracy_table<span class="op">$</span>accuracy<span class="op">/</span><span class="kw">nrow</span>(accuracy_table))</a>
+<a class="sourceLine" id="cb97-28" title="28"></a>
+<a class="sourceLine" id="cb97-29" title="29">total_accuracy</a></code></pre></div>
 <pre><code>## [1] 0.6892857</code></pre>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" title="1"><span class="kw">confusionMatrix</span>(accuracy_table<span class="op">$</span>predictions, accuracy_table<span class="op">$</span>season)</a></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1"><span class="kw">confusionMatrix</span>(accuracy_table<span class="op">$</span>predictions, accuracy_table<span class="op">$</span>season)</a></code></pre></div>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -5299,269 +4744,34 @@ div.tocify {
 ## Balanced Accuracy        0.75467       0.66301       0.74101        0.7190</code></pre>
 <p>You should see that the model gets a lot right (high numbers on the diagonal), but predicts winter more often than it should (last row). Accuracy in the training data is pretty good.</p>
 <p>But we know that performance on the training set is not that meaningful, especially with a complex model we always get fairly good performance on the data used to build the model. What matters is how it performs on new data, so let’s check that. We can look at the same for the test set, which is a better estimate of the true performance.</p>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" title="1"><span class="co">#copy and paste the code from above, but now do it for the test set.</span></a>
-<a class="sourceLine" id="cb103-2" title="2"><span class="co">#fit2 is the RF1 model</span></a>
-<a class="sourceLine" id="cb103-3" title="3">predictions_test &lt;-<span class="st"> </span><span class="kw">predict</span>(fit2, <span class="dt">newdata=</span> data_test_mod, <span class="dt">interval=</span><span class="st">&quot;confidence&quot;</span>)</a>
-<a class="sourceLine" id="cb103-4" title="4"></a>
-<a class="sourceLine" id="cb103-5" title="5">add_predictions_test &lt;-<span class="st"> </span>data_test_mod <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb103-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictions=</span> predictions_test)</a>
-<a class="sourceLine" id="cb103-7" title="7"><span class="co">#add_predictions</span></a>
-<a class="sourceLine" id="cb103-8" title="8"></a>
-<a class="sourceLine" id="cb103-9" title="9"></a>
-<a class="sourceLine" id="cb103-10" title="10">accuracy_test &lt;-<span class="st"> </span>(<span class="kw">nrow</span>(add_predictions_test))</a>
-<a class="sourceLine" id="cb103-11" title="11"></a>
-<a class="sourceLine" id="cb103-12" title="12"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(add_predictions_test)){ </a>
-<a class="sourceLine" id="cb103-13" title="13">  <span class="cf">if</span> (add_predictions_test<span class="op">$</span>season[i] <span class="op">==</span><span class="st"> </span>add_predictions_test<span class="op">$</span>predictions[i])</a>
-<a class="sourceLine" id="cb103-14" title="14">    accuracy_test[i] =<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb103-15" title="15">  <span class="cf">else</span></a>
-<a class="sourceLine" id="cb103-16" title="16">    accuracy_test[i] =<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb103-17" title="17">}</a>
-<a class="sourceLine" id="cb103-18" title="18"></a>
-<a class="sourceLine" id="cb103-19" title="19">accuracy_table_final &lt;-<span class="st"> </span>add_predictions_test <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb103-20" title="20"><span class="st">  </span><span class="kw">transmute</span>(season, predictions, accuracy_test)</a>
-<a class="sourceLine" id="cb103-21" title="21"></a>
-<a class="sourceLine" id="cb103-22" title="22">accuracy_table_final</a></code></pre></div>
-<pre><code>##     season predictions accuracy_test
-## 1     Fall      Winter             0
-## 2     Fall      Winter             0
-## 3     Fall      Winter             0
-## 4     Fall      Winter             0
-## 5     Fall      Winter             0
-## 6     Fall      Winter             0
-## 7     Fall      Winter             0
-## 8     Fall      Winter             0
-## 9   Spring      Winter             0
-## 10  Spring      Winter             0
-## 11  Spring      Winter             0
-## 12  Spring      Winter             0
-## 13  Spring      Winter             0
-## 14  Spring      Winter             0
-## 15  Spring      Winter             0
-## 16  Spring      Winter             0
-## 17  Summer        Fall             0
-## 18  Summer      Winter             0
-## 19  Summer      Winter             0
-## 20  Summer      Winter             0
-## 21  Winter      Winter             1
-## 22  Winter      Winter             1
-## 23  Winter      Winter             1
-## 24  Winter      Winter             1
-## 25  Winter      Winter             1
-## 26  Winter      Winter             1
-## 27  Winter      Winter             1
-## 28  Winter      Winter             1
-## 29  Winter      Winter             1
-## 30  Winter      Winter             1
-## 31  Winter      Winter             1
-## 32  Winter      Winter             1
-## 33  Winter      Winter             1
-## 34  Winter      Winter             1
-## 35  Winter      Winter             1
-## 36  Winter      Winter             1
-## 37  Winter      Winter             1
-## 38  Winter      Winter             1
-## 39  Winter      Winter             1
-## 40  Winter      Winter             1
-## 41  Winter      Winter             1
-## 42  Winter      Winter             1
-## 43  Winter      Winter             1
-## 44  Winter      Winter             1
-## 45  Winter      Winter             1
-## 46    Fall      Winter             0
-## 47    Fall      Winter             0
-## 48    Fall      Winter             0
-## 49    Fall        Fall             1
-## 50    Fall        Fall             1
-## 51    Fall        Fall             1
-## 52    Fall        Fall             1
-## 53    Fall        Fall             1
-## 54    Fall      Winter             0
-## 55    Fall      Winter             0
-## 56    Fall      Winter             0
-## 57    Fall      Winter             0
-## 58    Fall      Winter             0
-## 59    Fall      Winter             0
-## 60    Fall      Winter             0
-## 61    Fall      Winter             0
-## 62    Fall      Winter             0
-## 63    Fall      Winter             0
-## 64    Fall      Winter             0
-## 65    Fall      Winter             0
-## 66    Fall      Winter             0
-## 67    Fall      Winter             0
-## 68    Fall      Winter             0
-## 69    Fall      Spring             0
-## 70    Fall        Fall             1
-## 71    Fall      Winter             0
-## 72    Fall      Winter             0
-## 73    Fall      Winter             0
-## 74    Fall      Winter             0
-## 75    Fall      Winter             0
-## 76    Fall        Fall             1
-## 77    Fall      Winter             0
-## 78  Spring      Winter             0
-## 79  Spring      Winter             0
-## 80  Spring      Winter             0
-## 81  Spring      Winter             0
-## 82  Spring      Spring             1
-## 83  Spring        Fall             0
-## 84  Spring        Fall             0
-## 85  Spring      Winter             0
-## 86  Spring        Fall             0
-## 87  Spring      Winter             0
-## 88  Spring      Winter             0
-## 89  Spring      Winter             0
-## 90  Spring      Winter             0
-## 91  Spring      Winter             0
-## 92  Spring      Winter             0
-## 93  Spring      Winter             0
-## 94  Spring      Winter             0
-## 95  Spring      Winter             0
-## 96  Spring      Winter             0
-## 97  Spring      Winter             0
-## 98  Spring      Winter             0
-## 99  Spring      Winter             0
-## 100 Spring      Winter             0
-## 101 Spring      Winter             0
-## 102 Spring      Winter             0
-## 103 Spring      Winter             0
-## 104 Spring      Winter             0
-## 105 Spring      Winter             0
-## 106 Spring      Winter             0
-## 107 Spring      Winter             0
-## 108 Spring      Winter             0
-## 109 Spring      Winter             0
-## 110 Spring      Winter             0
-## 111 Spring      Winter             0
-## 112 Spring      Winter             0
-## 113 Spring      Winter             0
-## 114 Spring      Spring             1
-## 115 Spring      Summer             0
-## 116 Spring      Winter             0
-## 117 Spring      Winter             0
-## 118 Spring      Spring             1
-## 119 Spring      Winter             0
-## 120 Spring      Winter             0
-## 121 Spring      Summer             0
-## 122 Spring      Winter             0
-## 123 Summer      Winter             0
-## 124 Summer      Winter             0
-## 125 Summer      Winter             0
-## 126 Summer      Winter             0
-## 127 Summer      Winter             0
-## 128 Summer      Winter             0
-## 129 Summer      Winter             0
-## 130 Summer      Winter             0
-## 131 Summer      Winter             0
-## 132 Summer      Winter             0
-## 133 Summer      Winter             0
-## 134 Summer      Winter             0
-## 135 Summer      Winter             0
-## 136 Summer      Winter             0
-## 137 Summer      Winter             0
-## 138 Summer      Winter             0
-## 139 Summer      Winter             0
-## 140 Summer      Winter             0
-## 141 Summer      Winter             0
-## 142 Summer      Winter             0
-## 143 Summer      Spring             0
-## 144 Summer        Fall             0
-## 145 Summer        Fall             0
-## 146 Summer        Fall             0
-## 147 Summer      Winter             0
-## 148 Summer      Summer             1
-## 149 Summer      Winter             0
-## 150 Winter      Winter             1
-## 151 Winter      Winter             1
-## 152 Winter      Winter             1
-## 153 Winter      Winter             1
-## 154 Winter      Winter             1
-## 155 Winter      Winter             1
-## 156 Winter        Fall             0
-## 157 Winter      Winter             1
-## 158 Winter      Winter             1
-## 159 Winter      Winter             1
-## 160 Winter      Winter             1
-## 161 Winter      Winter             1
-## 162 Winter      Winter             1
-## 163 Winter      Winter             1
-## 164 Winter      Winter             1
-## 165 Winter      Winter             1
-## 166 Winter      Winter             1
-## 167 Winter      Winter             1
-## 168 Winter      Winter             1
-## 169 Winter      Winter             1
-## 170 Winter      Winter             1
-## 171 Winter      Winter             1
-## 172 Winter      Winter             1
-## 173 Winter      Winter             1
-## 174 Winter      Winter             1
-## 175 Winter      Winter             1
-## 176 Winter      Winter             1
-## 177 Winter      Winter             1
-## 178 Winter      Winter             1
-## 179 Winter      Winter             1
-## 180 Winter      Winter             1
-## 181 Winter      Winter             1
-## 182 Winter      Winter             1
-## 183 Winter      Winter             1
-## 184 Winter      Winter             1
-## 185 Winter      Winter             1
-## 186 Winter      Winter             1
-## 187 Winter      Winter             1
-## 188 Winter      Winter             1
-## 189 Winter      Winter             1
-## 190 Winter      Winter             1
-## 191 Winter      Winter             1
-## 192 Winter      Winter             1
-## 193 Winter      Winter             1
-## 194 Winter      Winter             1
-## 195 Winter      Winter             1
-## 196 Winter      Winter             1
-## 197 Winter      Winter             1
-## 198 Winter      Winter             1
-## 199 Winter      Winter             1
-## 200 Winter      Winter             1
-## 201 Winter      Winter             1
-## 202 Winter      Winter             1
-## 203 Winter      Winter             1
-## 204 Winter      Winter             1
-## 205 Winter      Winter             1
-## 206 Winter      Winter             1
-## 207 Winter      Winter             1
-## 208 Winter      Winter             1
-## 209 Winter      Winter             1
-## 210 Winter      Winter             1
-## 211 Winter      Winter             1
-## 212 Winter      Winter             1
-## 213 Winter      Winter             1
-## 214 Winter      Winter             1
-## 215 Winter      Winter             1
-## 216 Winter      Winter             1
-## 217 Winter      Winter             1
-## 218 Winter      Winter             1
-## 219 Winter      Winter             1
-## 220 Winter      Winter             1
-## 221 Winter      Winter             1
-## 222 Winter      Spring             0
-## 223 Winter      Winter             1
-## 224 Winter      Winter             1
-## 225 Winter      Winter             1
-## 226 Winter      Winter             1
-## 227 Winter      Winter             1
-## 228 Winter      Winter             1
-## 229 Winter      Winter             1
-## 230 Winter      Winter             1
-## 231 Winter      Winter             1
-## 232 Winter      Winter             1
-## 233 Winter      Winter             1
-## 234 Winter      Winter             1
-## 235 Winter      Winter             1</code></pre>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" title="1">total_accuracy_final &lt;-<span class="st"> </span><span class="kw">sum</span>(accuracy_table<span class="op">$</span>accuracy<span class="op">/</span><span class="kw">nrow</span>(accuracy_table))</a>
-<a class="sourceLine" id="cb105-2" title="2"></a>
-<a class="sourceLine" id="cb105-3" title="3">total_accuracy_final</a></code></pre></div>
-<pre><code>## [1] 0.6892857</code></pre>
-<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" title="1"><span class="kw">confusionMatrix</span>(accuracy_table_final<span class="op">$</span>predictions, accuracy_table_final<span class="op">$</span>season)</a></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" title="1"><span class="co">#copy and paste the code from above, but now do it for the test set.</span></a>
+<a class="sourceLine" id="cb101-2" title="2"><span class="co">#fit2 is the RF1 model</span></a>
+<a class="sourceLine" id="cb101-3" title="3">predictions_test &lt;-<span class="st"> </span><span class="kw">predict</span>(fit2, <span class="dt">newdata=</span> data_test_mod, <span class="dt">interval=</span><span class="st">&quot;confidence&quot;</span>)</a>
+<a class="sourceLine" id="cb101-4" title="4"></a>
+<a class="sourceLine" id="cb101-5" title="5">add_predictions_test &lt;-<span class="st"> </span>data_test_mod <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb101-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictions=</span> predictions_test)</a>
+<a class="sourceLine" id="cb101-7" title="7"><span class="co">#add_predictions</span></a>
+<a class="sourceLine" id="cb101-8" title="8"></a>
+<a class="sourceLine" id="cb101-9" title="9"><span class="co">#Manual calculation of accuracy tht matches confusionMatrix call</span></a>
+<a class="sourceLine" id="cb101-10" title="10">accuracy_test &lt;-<span class="st"> </span>(<span class="kw">nrow</span>(add_predictions_test))</a>
+<a class="sourceLine" id="cb101-11" title="11"></a>
+<a class="sourceLine" id="cb101-12" title="12"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(add_predictions_test)){ </a>
+<a class="sourceLine" id="cb101-13" title="13">  <span class="cf">if</span> (add_predictions_test<span class="op">$</span>season[i] <span class="op">==</span><span class="st"> </span>add_predictions_test<span class="op">$</span>predictions[i])</a>
+<a class="sourceLine" id="cb101-14" title="14">    accuracy_test[i] =<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb101-15" title="15">  <span class="cf">else</span></a>
+<a class="sourceLine" id="cb101-16" title="16">    accuracy_test[i] =<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb101-17" title="17">}</a>
+<a class="sourceLine" id="cb101-18" title="18"></a>
+<a class="sourceLine" id="cb101-19" title="19">accuracy_table_final &lt;-<span class="st"> </span>add_predictions_test <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb101-20" title="20"><span class="st">  </span><span class="kw">transmute</span>(season, predictions, accuracy_test)</a>
+<a class="sourceLine" id="cb101-21" title="21"></a>
+<a class="sourceLine" id="cb101-22" title="22"><span class="co">#accuracy_table_final</span></a>
+<a class="sourceLine" id="cb101-23" title="23"></a>
+<a class="sourceLine" id="cb101-24" title="24">total_accuracy_final &lt;-<span class="st"> </span><span class="kw">sum</span>(accuracy_table_final<span class="op">$</span>accuracy<span class="op">/</span><span class="kw">nrow</span>(accuracy_table_final))</a>
+<a class="sourceLine" id="cb101-25" title="25"></a>
+<a class="sourceLine" id="cb101-26" title="26">total_accuracy_final</a></code></pre></div>
+<pre><code>## [1] 0.5106383</code></pre>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" title="1"><span class="kw">confusionMatrix</span>(accuracy_table_final<span class="op">$</span>predictions, accuracy_table_final<span class="op">$</span>season)</a></code></pre></div>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -5597,8 +4807,8 @@ div.tocify {
 </div>
 <div id="wrapping-up" class="section level1">
 <h1>Wrapping up</h1>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="co"># shut down the parallel computing cluster we created at the beginning of the analysis</span></a>
-<a class="sourceLine" id="cb109-2" title="2"><span class="kw">stopCluster</span>(cl)</a></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" title="1"><span class="co"># shut down the parallel computing cluster we created at the beginning of the analysis</span></a>
+<a class="sourceLine" id="cb105-2" title="2"><span class="kw">stopCluster</span>(cl)</a></code></pre></div>
 <p>Overall, this suggests there is just no “signal” in the variables we are trying to use to predict the outcome, and the model fits to “noise” - thus doing ok on training data but failing on the test/cross-validated performance evaluation.</p>
 <p>We can conclude that this is an analysis where we walk away “empty handed”. If this were a real analysis and you had data and did a ‘let’s see if something is going on’ analysis, this would be somewhat disappointing. If you had a specific, plausible hypothesis before you started your analysis (e.g., that outbreak size is correlated with season), finding that your biologically reasonable hypothesis doesn’t seem to be right is useful. Unfortunately, null results are still hard to publish.</p>
 <p>Note that we didn’t use p-values here, but I bet we would have found several that are statistically significant <strong>when evaluated on the training data</strong> (as they usually are). But they would be meaningless and essentially “fitting the noise”. I contend that a lot of what’s published out there is exactly that, spurious p-values because models are evaluated on the training data.</p>

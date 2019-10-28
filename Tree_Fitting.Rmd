@@ -96,6 +96,8 @@ Let's first check for missing values.
 
 ```{r check-reduced-data}
 # write code that looks at missing values
+
+# I think I am overthinking this, and I don't think this is correct.
 is.na(picked_variables)
 
 ```
@@ -250,6 +252,8 @@ Next, let's create plots for the categorical variables. You can use, for instanc
 
 ```{r plots-2}
 #write code that produces plots or tables showing our outcome of interest and each categorical predictor.
+
+# I still need to fix these up a bit
 p5 <- ggplot(season_first, aes(season, Action1)) + geom_count()
 p6 <- ggplot(season_first, aes(season, Path1)) + geom_count()
 p7 <- ggplot(season_first, aes(season, Setting)) + geom_count()
@@ -541,6 +545,7 @@ add_predictions <- data_train_mod %>%
 #add_predictions
 
 
+#I went ahead and created a manual calculation of accuracy before calling confusion matrix to see if I got the same thing.  And yay, I do!
 accuracy <- (nrow(add_predictions))
 
 for (i in 1:nrow(add_predictions)){ 
@@ -553,7 +558,7 @@ for (i in 1:nrow(add_predictions)){
 accuracy_table <- data_train_mod %>%
   transmute(season, predictions, accuracy)
 
-accuracy_table
+#accuracy_table
 
 total_accuracy <- sum(accuracy_table$accuracy/nrow(accuracy_table))
 
@@ -576,7 +581,7 @@ add_predictions_test <- data_test_mod %>%
   mutate(predictions= predictions_test)
 #add_predictions
 
-
+#Manual calculation of accuracy tht matches confusionMatrix call
 accuracy_test <- (nrow(add_predictions_test))
 
 for (i in 1:nrow(add_predictions_test)){ 
@@ -589,9 +594,9 @@ for (i in 1:nrow(add_predictions_test)){
 accuracy_table_final <- add_predictions_test %>%
   transmute(season, predictions, accuracy_test)
 
-accuracy_table_final
+#accuracy_table_final
 
-total_accuracy_final <- sum(accuracy_table$accuracy/nrow(accuracy_table))
+total_accuracy_final <- sum(accuracy_table_final$accuracy/nrow(accuracy_table_final))
 
 total_accuracy_final
 
