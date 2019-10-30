@@ -253,8 +253,29 @@ p4 <- ggplot(season_first, aes(season, MedianD1)) + geom_violin()
 
 p5 <- ggplot(season_first, aes(season, RateAll)) + geom_violin()
 
+
 grid.arrange(p1, p2, p3, p4, p5, nrow=3, ncol=2)
 
+
+p6 <- ggplot(season_first, aes(season, CasesAll)) + geom_violin()
+
+p7 <- ggplot(season_first, aes(season, Deaths)) + geom_violin()
+
+p8 <- ggplot(season_first, aes(season, EndMonth)) + geom_violin()
+
+p9 <- ggplot(season_first, aes(season, Hospitalizations)) + geom_violin()
+
+grid.arrange(p6, p7, p8, p9, nrow=2, ncol=2)
+
+
+p10 <- ggplot(season_first, aes(season, MeanI1)) + geom_violin()
+
+p11 <- ggplot(season_first, aes(season, MedianI1)) + geom_violin()
+
+p12 <- ggplot(season_first, aes(season, StartMonth)) + geom_violin()
+
+
+grid.arrange(p10, p11, p12, nrow=2, ncol=2)
 
 ```
 

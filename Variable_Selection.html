@@ -1739,7 +1739,7 @@ div.tocify {
 <a class="sourceLine" id="cb84-9" title="9">resmat[<span class="dv">5</span>,<span class="dv">3</span>] =<span class="st"> </span><span class="kw">paste</span>(<span class="kw">as.vector</span>(sfeatga_res<span class="op">$</span>x), <span class="dt">collapse=</span> <span class="st">&#39;, &#39;</span>)</a>
 <a class="sourceLine" id="cb84-10" title="10">runtime.minutes_SS=(<span class="kw">proc.time</span>()<span class="op">-</span>tstart)[[<span class="dv">3</span>]]<span class="op">/</span><span class="dv">60</span>; <span class="co">#total time in minutes the optimization took</span></a>
 <a class="sourceLine" id="cb84-11" title="11"><span class="kw">print</span>(<span class="kw">sprintf</span>(<span class="st">&#39;subset selection took %f minutes&#39;</span>,runtime.minutes_SS));</a></code></pre></div>
-<pre><code>## [1] &quot;subset selection took 1.880333 minutes&quot;</code></pre>
+<pre><code>## [1] &quot;subset selection took 1.738333 minutes&quot;</code></pre>
 <div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1"><span class="kw">kable</span>(resmat)</a></code></pre></div>
 <table>
 <thead>
@@ -2007,7 +2007,7 @@ div.tocify {
 <a class="sourceLine" id="cb98-8" title="8">resmat[<span class="dv">5</span>,<span class="dv">3</span>] =<span class="st"> </span><span class="kw">paste</span>(<span class="kw">as.vector</span>(sfeatga_res<span class="op">$</span>x), <span class="dt">collapse=</span> <span class="st">&#39;, &#39;</span>)</a>
 <a class="sourceLine" id="cb98-9" title="9">runtime.minutes_SS=(<span class="kw">proc.time</span>()<span class="op">-</span>tstart)[[<span class="dv">3</span>]]<span class="op">/</span><span class="dv">60</span>; <span class="co">#total time in minutes the optimization took</span></a>
 <a class="sourceLine" id="cb98-10" title="10"><span class="kw">print</span>(<span class="kw">sprintf</span>(<span class="st">&#39;subset selection took %f minutes&#39;</span>,runtime.minutes_SS));</a></code></pre></div>
-<pre><code>## [1] &quot;subset selection took 1.806667 minutes&quot;</code></pre>
+<pre><code>## [1] &quot;subset selection took 1.757500 minutes&quot;</code></pre>
 <div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1"><span class="kw">kable</span>(resmat)</a></code></pre></div>
 <table>
 <thead>
@@ -2249,7 +2249,7 @@ div.tocify {
 <a class="sourceLine" id="cb115-8" title="8">resmat[<span class="dv">5</span>,<span class="dv">3</span>] =<span class="st"> </span><span class="kw">paste</span>(<span class="kw">as.vector</span>(sfeatga_res<span class="op">$</span>x), <span class="dt">collapse=</span> <span class="st">&#39;, &#39;</span>)</a>
 <a class="sourceLine" id="cb115-9" title="9">runtime.minutes_SS=(<span class="kw">proc.time</span>()<span class="op">-</span>tstart)[[<span class="dv">3</span>]]<span class="op">/</span><span class="dv">60</span>; <span class="co">#total time in minutes the optimization took</span></a>
 <a class="sourceLine" id="cb115-10" title="10"><span class="kw">print</span>(<span class="kw">sprintf</span>(<span class="st">&#39;subset selection took %f minutes&#39;</span>,runtime.minutes_SS));</a></code></pre></div>
-<pre><code>## [1] &quot;subset selection took 1.459500 minutes&quot;</code></pre>
+<pre><code>## [1] &quot;subset selection took 1.403833 minutes&quot;</code></pre>
 <div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1"><span class="kw">kable</span>(resmat)</a></code></pre></div>
 <table>
 <thead>
@@ -2303,7 +2303,7 @@ div.tocify {
 <pre><code>## Prediction: 850 observations
 ## predict.type: prob
 ## threshold: No=0.50,Yes=0.50
-## time: 0.02
+## time: 0.00
 ##   id truth   prob.No   prob.Yes response
 ## 1  1    No 0.7825221 0.21747793       No
 ## 2  2    No 0.7823488 0.21765119       No
