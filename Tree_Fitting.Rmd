@@ -112,24 +112,23 @@ You will likely find that as you convert `OBYear` to numeric, something doesn't 
 ```{r adjust}
 #write code that cleans OBYear, convert it to numeric. Remove observations with OBYear = 0. 
 #also convert any other variables as needed
-removed_0OBYear <- subset(picked_variables, OBYear != "0")
+removed_0OBYear <- subset(picked_variables, OBYear != "0" & OBYear != "2002-2007")
 removed_0OBYear <- droplevels(removed_0OBYear)
 
-str(removed_0OBYear)
+#removed_0OBYear$OBYear
+#str(removed_0OBYear)
 
 year_as_numeric <- as.numeric(as.character(removed_0OBYear$OBYear))
 
 removed_0OBYear$OBYear <- year_as_numeric
+
 str(removed_0OBYear)
-
 vis_dat(removed_0OBYear)
-
 ```
 
 Look at the data to see what else we need to do.
 
 ```{r}
-str(removed_0OBYear)
 summary(removed_0OBYear)
 ```
 
@@ -183,8 +182,8 @@ further_cleaning <- smartbind(restaurant_settings_edit,other_settings_edit)
 
 further_cleaning$Setting <- as.factor(further_cleaning$Setting)
 
-str(further_cleaning)
-vis_dat(further_cleaning)
+#str(further_cleaning)
+#vis_dat(further_cleaning)
 
 summary(further_cleaning$Action1)
 #Get rid of the No observation
@@ -213,10 +212,23 @@ summary(mergeWaterborne_environmental$Trans1)
 
 summary(mergeWaterborne_environmental$season)
 
-season_first <- mergeWaterborne_environmental %>%
+dropStateVar <- dplyr::select(mergeWaterborne_environmental, -c(State))
+head(dropStateVar)
+
+Vomiting <- as.factor(dropStateVar$Vomit)
+
+makeVomit_factor <- dropStateVar %>%
+  mutate(Vomiting) %>%
+  select(-c(Vomit))
+
+head(makeVomit_factor)
+
+season_first <- makeVomit_factor %>%
   select(season, everything())
 
 summary(season_first)
+str(season_first)
+vis_dat(season_first)
 #season_first
 ```
 
@@ -260,9 +272,11 @@ p7 <- ggplot(season_first, aes(season, Setting)) + geom_count()
 p8 <- ggplot(season_first, aes(season, Hemisphere)) + geom_count()
 p9 <- ggplot(season_first, aes(season, Country)) + geom_count()
 p10 <- ggplot(season_first, aes(season, Trans1)) + geom_count()
-p11 <- ggplot(season_first, aes(season, season)) + geom_count()
+p11 <- ggplot(season_first, aes(season, gg2c4)) + geom_count()
+p12 <- ggplot(season_first, aes(season, Vomiting)) + geom_count()
 
-grid.arrange(p5, p6, p7, p8, p9, p10, p11, ncol=3, nrow=3, widths=c(1,1,1.15))
+
+grid.arrange(p5, p6, p7, p8, p9, p10, p11, p12, ncol=2, nrow=4)
 
 ```
 

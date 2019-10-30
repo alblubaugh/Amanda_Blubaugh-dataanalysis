@@ -4067,41 +4067,21 @@ div.tocify {
 <p>Let’s make sure everything has the right format (numeric/integer/factor). Adjust/recode variables as needed. You will likely find that as you convert <code>OBYear</code> to numeric, something doesn’t quite work. Take a look. Fix by removing the observation with the troublesome entry, then convert to numeric. Finally, remove the observations that have 0 as OByear - there are more than 1 now.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="co">#write code that cleans OBYear, convert it to numeric. Remove observations with OBYear = 0. </span></a>
 <a class="sourceLine" id="cb20-2" title="2"><span class="co">#also convert any other variables as needed</span></a>
-<a class="sourceLine" id="cb20-3" title="3">removed_0OBYear &lt;-<span class="st"> </span><span class="kw">subset</span>(picked_variables, OBYear <span class="op">!=</span><span class="st"> &quot;0&quot;</span>)</a>
+<a class="sourceLine" id="cb20-3" title="3">removed_0OBYear &lt;-<span class="st"> </span><span class="kw">subset</span>(picked_variables, OBYear <span class="op">!=</span><span class="st"> &quot;0&quot;</span> <span class="op">&amp;</span><span class="st"> </span>OBYear <span class="op">!=</span><span class="st"> &quot;2002-2007&quot;</span>)</a>
 <a class="sourceLine" id="cb20-4" title="4">removed_0OBYear &lt;-<span class="st"> </span><span class="kw">droplevels</span>(removed_0OBYear)</a>
 <a class="sourceLine" id="cb20-5" title="5"></a>
-<a class="sourceLine" id="cb20-6" title="6"><span class="kw">str</span>(removed_0OBYear)</a></code></pre></div>
-<pre><code>## &#39;data.frame&#39;:    954 obs. of  22 variables:
+<a class="sourceLine" id="cb20-6" title="6"><span class="co">#removed_0OBYear$OBYear</span></a>
+<a class="sourceLine" id="cb20-7" title="7"><span class="co">#str(removed_0OBYear)</span></a>
+<a class="sourceLine" id="cb20-8" title="8"></a>
+<a class="sourceLine" id="cb20-9" title="9">year_as_numeric &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(removed_0OBYear<span class="op">$</span>OBYear))</a>
+<a class="sourceLine" id="cb20-10" title="10"></a>
+<a class="sourceLine" id="cb20-11" title="11">removed_0OBYear<span class="op">$</span>OBYear &lt;-<span class="st"> </span>year_as_numeric</a>
+<a class="sourceLine" id="cb20-12" title="12"></a>
+<a class="sourceLine" id="cb20-13" title="13"><span class="kw">str</span>(removed_0OBYear)</a></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    953 obs. of  22 variables:
 ##  $ Action1         : Factor w/ 4 levels &quot;No&quot;,&quot;Unknown&quot;,..: 3 3 3 3 3 3 3 3 3 4 ...
 ##  $ CasesAll        : int  15 65 27 4 15 6 40 10 116 45 ...
-##  $ Country         : Factor w/ 21 levels &quot;Australia&quot;,&quot;Brazil&quot;,..: 11 21 16 16 16 16 16 16 16 21 ...
-##  $ Deaths          : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ EndMonth        : int  12 9 0 0 0 0 0 0 11 11 ...
-##  $ gg2c4           : Factor w/ 2 levels &quot;&quot;,&quot;Yes&quot;: 2 1 2 1 2 1 1 1 2 1 ...
-##  $ Hemisphere      : Factor w/ 2 levels &quot;Northern&quot;,&quot;Southern&quot;: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Hospitalizations: int  0 0 0 0 0 0 0 0 5 10 ...
-##  $ MeanD1          : num  0 0 0 0 0 0 0 0 0 0 ...
-##  $ MeanI1          : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ MedianD1        : num  0 36 0 0 0 0 0 0 0 48 ...
-##  $ MedianI1        : int  0 37 0 0 0 0 0 0 0 31 ...
-##  $ OBYear          : Factor w/ 22 levels &quot;1983&quot;,&quot;1990&quot;,..: 10 9 18 18 18 18 18 18 16 4 ...
-##  $ Path1           : Factor w/ 4 levels &quot;No&quot;,&quot;Unknown&quot;,..: 1 1 3 3 3 3 3 3 1 3 ...
-##  $ RateAll         : num  0 39.8 20.8 100 60 ...
-##  $ RiskAll         : num  0 108 130 4 25 ...
-##  $ season          : Factor w/ 4 levels &quot;Fall&quot;,&quot;Spring&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Setting_1       : Factor w/ 373 levels &quot;\tPsychiatric Care Center adjoined&quot;,..: 118 32 39 300 39 340 39 300 196 3 ...
-##  $ StartMonth      : int  11 9 9 10 11 11 11 11 11 11 ...
-##  $ State           : Factor w/ 36 levels &quot;0&quot;,&quot;1&quot;,&quot;14 states: CA, UT, KS, WI, IL, IN, OH, GA, FL, NC, VA, WV, NY, PA,&quot;,..: 1 21 1 1 1 1 1 1 1 9 ...
-##  $ Trans1          : Factor w/ 6 levels &quot;Environmental&quot;,..: 5 2 2 2 2 2 2 2 5 2 ...
-##  $ Vomit           : int  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">year_as_numeric &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>(removed_0OBYear<span class="op">$</span>OBYear))</a></code></pre></div>
-<pre><code>## Warning: NAs introduced by coercion</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">removed_0OBYear<span class="op">$</span>OBYear &lt;-<span class="st"> </span>year_as_numeric</a>
-<a class="sourceLine" id="cb24-2" title="2"><span class="kw">str</span>(removed_0OBYear)</a></code></pre></div>
-<pre><code>## &#39;data.frame&#39;:    954 obs. of  22 variables:
-##  $ Action1         : Factor w/ 4 levels &quot;No&quot;,&quot;Unknown&quot;,..: 3 3 3 3 3 3 3 3 3 4 ...
-##  $ CasesAll        : int  15 65 27 4 15 6 40 10 116 45 ...
-##  $ Country         : Factor w/ 21 levels &quot;Australia&quot;,&quot;Brazil&quot;,..: 11 21 16 16 16 16 16 16 16 21 ...
+##  $ Country         : Factor w/ 20 levels &quot;Australia&quot;,&quot;Brazil&quot;,..: 11 20 15 15 15 15 15 15 15 20 ...
 ##  $ Deaths          : int  0 0 0 0 0 0 0 0 0 0 ...
 ##  $ EndMonth        : int  12 9 0 0 0 0 0 0 11 11 ...
 ##  $ gg2c4           : Factor w/ 2 levels &quot;&quot;,&quot;Yes&quot;: 2 1 2 1 2 1 1 1 2 1 ...
@@ -4121,79 +4101,55 @@ div.tocify {
 ##  $ State           : Factor w/ 36 levels &quot;0&quot;,&quot;1&quot;,&quot;14 states: CA, UT, KS, WI, IL, IN, OH, GA, FL, NC, VA, WV, NY, PA,&quot;,..: 1 21 1 1 1 1 1 1 1 9 ...
 ##  $ Trans1          : Factor w/ 6 levels &quot;Environmental&quot;,..: 5 2 2 2 2 2 2 2 5 2 ...
 ##  $ Vomit           : int  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw">vis_dat</span>(removed_0OBYear)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">vis_dat</span>(removed_0OBYear)</a></code></pre></div>
 <p><img src="Tree_Fitting_files/figure-html/adjust-1.png" width="672" /></p>
 <p>Look at the data to see what else we need to do.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">str</span>(removed_0OBYear)</a></code></pre></div>
-<pre><code>## &#39;data.frame&#39;:    954 obs. of  22 variables:
-##  $ Action1         : Factor w/ 4 levels &quot;No&quot;,&quot;Unknown&quot;,..: 3 3 3 3 3 3 3 3 3 4 ...
-##  $ CasesAll        : int  15 65 27 4 15 6 40 10 116 45 ...
-##  $ Country         : Factor w/ 21 levels &quot;Australia&quot;,&quot;Brazil&quot;,..: 11 21 16 16 16 16 16 16 16 21 ...
-##  $ Deaths          : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ EndMonth        : int  12 9 0 0 0 0 0 0 11 11 ...
-##  $ gg2c4           : Factor w/ 2 levels &quot;&quot;,&quot;Yes&quot;: 2 1 2 1 2 1 1 1 2 1 ...
-##  $ Hemisphere      : Factor w/ 2 levels &quot;Northern&quot;,&quot;Southern&quot;: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Hospitalizations: int  0 0 0 0 0 0 0 0 5 10 ...
-##  $ MeanD1          : num  0 0 0 0 0 0 0 0 0 0 ...
-##  $ MeanI1          : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ MedianD1        : num  0 36 0 0 0 0 0 0 0 48 ...
-##  $ MedianI1        : int  0 37 0 0 0 0 0 0 0 31 ...
-##  $ OBYear          : num  1999 1998 2006 2006 2006 ...
-##  $ Path1           : Factor w/ 4 levels &quot;No&quot;,&quot;Unknown&quot;,..: 1 1 3 3 3 3 3 3 1 3 ...
-##  $ RateAll         : num  0 39.8 20.8 100 60 ...
-##  $ RiskAll         : num  0 108 130 4 25 ...
-##  $ season          : Factor w/ 4 levels &quot;Fall&quot;,&quot;Spring&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Setting_1       : Factor w/ 373 levels &quot;\tPsychiatric Care Center adjoined&quot;,..: 118 32 39 300 39 340 39 300 196 3 ...
-##  $ StartMonth      : int  11 9 9 10 11 11 11 11 11 11 ...
-##  $ State           : Factor w/ 36 levels &quot;0&quot;,&quot;1&quot;,&quot;14 states: CA, UT, KS, WI, IL, IN, OH, GA, FL, NC, VA, WV, NY, PA,&quot;,..: 1 21 1 1 1 1 1 1 1 9 ...
-##  $ Trans1          : Factor w/ 6 levels &quot;Environmental&quot;,..: 5 2 2 2 2 2 2 2 5 2 ...
-##  $ Vomit           : int  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">summary</span>(removed_0OBYear)</a></code></pre></div>
-<pre><code>##         Action1       CasesAll            Country        Deaths       
-##  No         :  1   Min.   :    1.0   Other    :397   Min.   :0.00000  
-##  Unknown    :  1   1st Qu.:    9.0   Japan    :371   1st Qu.:0.00000  
-##  Unspecified:743   Median :   25.0   USA      :106   Median :0.00000  
-##  Yes        :209   Mean   :  129.1   Australia: 21   Mean   :0.05373  
-##                    3rd Qu.:   64.0   Multiple : 17   3rd Qu.:0.00000  
-##                    Max.   :32150.0   Denmark  : 11   Max.   :9.00000  
-##                    NA&#39;s   :5         (Other)  : 31   NA&#39;s   :42       
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">summary</span>(removed_0OBYear)</a></code></pre></div>
+<pre><code>##         Action1       CasesAll          Country        Deaths       
+##  No         :  1   Min.   :    1   Other    :397   Min.   :0.00000  
+##  Unknown    :  1   1st Qu.:    9   Japan    :371   1st Qu.:0.00000  
+##  Unspecified:742   Median :   25   USA      :106   Median :0.00000  
+##  Yes        :209   Mean   :  129   Australia: 21   Mean   :0.05379  
+##                    3rd Qu.:   64   Multiple : 17   3rd Qu.:0.00000  
+##                    Max.   :32150   Denmark  : 11   Max.   :9.00000  
+##                    NA&#39;s   :5       (Other)  : 30   NA&#39;s   :42       
 ##     EndMonth      gg2c4        Hemisphere  Hospitalizations  
-##  Min.   : 0.000      :676   Northern:873   Min.   :  0.0000  
-##  1st Qu.: 0.000   Yes:278   Southern: 81   1st Qu.:  0.0000  
+##  Min.   : 0.000      :676   Northern:872   Min.   :  0.0000  
+##  1st Qu.: 0.000   Yes:277   Southern: 81   1st Qu.:  0.0000  
 ##  Median : 0.000                            Median :  0.0000  
-##  Mean   : 2.563                            Mean   :  0.9265  
+##  Mean   : 2.559                            Mean   :  0.7113  
 ##  3rd Qu.: 4.000                            3rd Qu.:  0.0000  
-##  Max.   :12.000                            Max.   :197.0000  
+##  Max.   :12.000                            Max.   :125.0000  
 ##                                            NA&#39;s   :42        
-##      MeanD1           MeanI1           MedianD1          MedianI1     
-##  Min.   :  0.00   Min.   : 0.0000   Min.   :  0.000   Min.   : 0.000  
-##  1st Qu.:  0.00   1st Qu.: 0.0000   1st Qu.:  0.000   1st Qu.: 0.000  
-##  Median :  0.00   Median : 0.0000   Median :  0.000   Median : 0.000  
-##  Mean   :  1.69   Mean   : 0.7117   Mean   :  2.608   Mean   : 1.701  
-##  3rd Qu.:  0.00   3rd Qu.: 0.0000   3rd Qu.:  0.000   3rd Qu.: 0.000  
-##  Max.   :273.60   Max.   :48.0000   Max.   :235.200   Max.   :65.000  
-##                                                                       
+##      MeanD1            MeanI1           MedianD1          MedianI1     
+##  Min.   :  0.000   Min.   : 0.0000   Min.   :  0.000   Min.   : 0.000  
+##  1st Qu.:  0.000   1st Qu.: 0.0000   1st Qu.:  0.000   1st Qu.: 0.000  
+##  Median :  0.000   Median : 0.0000   Median :  0.000   Median : 0.000  
+##  Mean   :  1.558   Mean   : 0.7125   Mean   :  2.611   Mean   : 1.703  
+##  3rd Qu.:  0.000   3rd Qu.: 0.0000   3rd Qu.:  0.000   3rd Qu.: 0.000  
+##  Max.   :273.600   Max.   :48.0000   Max.   :235.200   Max.   :65.000  
+##                                                                        
 ##      OBYear             Path1        RateAll          RiskAll       
 ##  Min.   :1983   No         :197   Min.   :  0.00   Min.   :    0.0  
 ##  1st Qu.:2000   Unknown    :  3   1st Qu.:  0.00   1st Qu.:    0.0  
-##  Median :2003   Unspecified:676   Median : 16.50   Median :   20.5  
+##  Median :2003   Unspecified:675   Median : 16.50   Median :   20.5  
 ##  Mean   :2002   Yes        : 78   Mean   : 27.04   Mean   :  399.7  
 ##  3rd Qu.:2005                     3rd Qu.: 49.00   3rd Qu.:  110.8  
 ##  Max.   :2010                     Max.   :105.00   Max.   :35000.0  
-##  NA&#39;s   :1                        NA&#39;s   :104      NA&#39;s   :116      
+##                                   NA&#39;s   :103      NA&#39;s   :115      
 ##     season                  Setting_1     StartMonth         State    
-##  Fall  :164   Restaurant         :104   Min.   : 0.000   0      :843  
+##  Fall  :164   Restaurant         :104   Min.   : 0.000   0      :842  
 ##  Spring:222   0                  : 85   1st Qu.: 2.000   NC     : 18  
 ##  Summer:125   restaurant         : 70   Median : 5.000   NY     : 10  
-##  Winter:443   Hospital           : 39   Mean   : 5.895   AK     :  9  
+##  Winter:442   Hospital           : 39   Mean   : 5.894   AK     :  9  
 ##               Hotel              : 25   3rd Qu.:10.000   FL     :  7  
 ##               Nursing Care Center: 25   Max.   :12.000   MI     :  6  
-##               (Other)            :606                    (Other): 61  
+##               (Other)            :605                    (Other): 61  
 ##               Trans1        Vomit       
 ##  Environmental   : 11   Min.   :0.0000  
 ##  Foodborne       :373   1st Qu.:0.0000  
-##  Person to Person:151   Median :1.0000  
-##  Unknown         : 63   Mean   :0.5068  
+##  Person to Person:150   Median :1.0000  
+##  Unknown         : 63   Mean   :0.5074  
 ##  Unspecified     :284   3rd Qu.:1.0000  
 ##  Waterborne      : 72   Max.   :1.0000  
 ##                         NA&#39;s   :1</code></pre>
@@ -4202,204 +4158,192 @@ div.tocify {
 <p>Let’s also lump country together, make 3 categories, Japan, USA, and Other.</p>
 <p>As discussed previously, it makes sense to move the Waterborne to the Environmental in the <code>Trans1</code> variable. It also turns out that most outbreaks have no information for state, so best to drop the <code>State</code> variable.</p>
 <p>Finally, move the outcome into the first column.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="co"># write code that performs the actions described above</span></a>
-<a class="sourceLine" id="cb31-2" title="2"><span class="co"># at the end, use the droplevels() command to remove empty factor levels</span></a>
-<a class="sourceLine" id="cb31-3" title="3"></a>
-<a class="sourceLine" id="cb31-4" title="4"><span class="co"># remove the unspecified entry and the level unspecified for hemisphere</span></a>
-<a class="sourceLine" id="cb31-5" title="5"><span class="co">#glimpse(removed_0OBYear$Hemisphere)</span></a>
-<a class="sourceLine" id="cb31-6" title="6">removeHemisphere &lt;-<span class="st"> </span>removed_0OBYear <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-7" title="7"><span class="st">  </span><span class="kw">subset</span>(Hemisphere <span class="op">!=</span><span class="st"> &quot;Unspecified&quot;</span>)</a>
-<a class="sourceLine" id="cb31-8" title="8"></a>
-<a class="sourceLine" id="cb31-9" title="9">removeHemisphere &lt;-<span class="st"> </span>removeHemisphere <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-10" title="10"><span class="st">  </span><span class="kw">droplevels</span>(removeHemisphere<span class="op">$</span>Hemisphere)</a>
-<a class="sourceLine" id="cb31-11" title="11"></a>
-<a class="sourceLine" id="cb31-12" title="12"><span class="co"># checking removeHemisphere let me see I only lost the one observation that was Unspecified for Hemisphere</span></a>
-<a class="sourceLine" id="cb31-13" title="13"><span class="co"># look at responses and levels in Action variable</span></a>
-<a class="sourceLine" id="cb31-14" title="14"><span class="co">#glimpse(removeHemisphere$Action1)</span></a>
-<a class="sourceLine" id="cb31-15" title="15">combineAction1 &lt;-<span class="st"> </span>removeHemisphere <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-16" title="16"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Action1=</span> <span class="kw">fct_recode</span>(Action1, <span class="st">&quot;Unspecified&quot;</span> =<span class="st"> &quot;Unknown&quot;</span>))</a>
-<a class="sourceLine" id="cb31-17" title="17"></a>
-<a class="sourceLine" id="cb31-18" title="18"><span class="co">#glimpse(combineAction1$Path1)</span></a>
-<a class="sourceLine" id="cb31-19" title="19">combinePath1 &lt;-<span class="st"> </span>combineAction1 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-20" title="20"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Path1=</span> <span class="kw">fct_recode</span>(Path1, <span class="st">&quot;Unspecified&quot;</span> =<span class="st"> &quot;Unknown&quot;</span>))</a>
-<a class="sourceLine" id="cb31-21" title="21"></a>
-<a class="sourceLine" id="cb31-22" title="22"><span class="co">#here is what worked for me to label the restaurants</span></a>
-<a class="sourceLine" id="cb31-23" title="23">restaurant_settings &lt;-<span class="st"> </span><span class="kw">subset</span>(combinePath1, Setting_<span class="dv">1</span> <span class="op">==</span><span class="st"> &quot;restaurant&quot;</span> <span class="op">|</span><span class="st"> </span>Setting_<span class="dv">1</span> <span class="op">==</span><span class="st"> &quot;Restaurant&quot;</span>)</a>
-<a class="sourceLine" id="cb31-24" title="24">other_settings &lt;-<span class="st"> </span><span class="kw">subset</span>(combinePath1, Setting_<span class="dv">1</span> <span class="op">!=</span><span class="st"> &quot;restaurant&quot;</span> <span class="op">&amp;</span><span class="st"> </span>Setting_<span class="dv">1</span> <span class="op">!=</span><span class="st"> &quot;Restaurant&quot;</span>)</a>
-<a class="sourceLine" id="cb31-25" title="25"></a>
-<a class="sourceLine" id="cb31-26" title="26">restaurant_settings_edit &lt;-<span class="st"> </span>restaurant_settings <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-27" title="27"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Setting =</span> <span class="st">&quot;Restaurant&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-28" title="28"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(Setting_<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb31-29" title="29">  </a>
-<a class="sourceLine" id="cb31-30" title="30">other_settings_edit &lt;-<span class="st"> </span>other_settings <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-31" title="31"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Setting =</span> <span class="st">&quot;Other&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-32" title="32"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(Setting_<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb31-33" title="33">  </a>
-<a class="sourceLine" id="cb31-34" title="34"><span class="co">#here I incorporated gtools (library loaded at top) to use smartbind and paste both of my subsets together. It appears to have worked, as I am back with 579 rows again. Let&#39;s glance and see...</span></a>
-<a class="sourceLine" id="cb31-35" title="35">further_cleaning &lt;-<span class="st"> </span><span class="kw">smartbind</span>(restaurant_settings_edit,other_settings_edit)</a>
-<a class="sourceLine" id="cb31-36" title="36"><span class="co">#str(further_cleaning)</span></a>
-<a class="sourceLine" id="cb31-37" title="37"></a>
-<a class="sourceLine" id="cb31-38" title="38">further_cleaning<span class="op">$</span>Setting &lt;-<span class="st"> </span><span class="kw">as.factor</span>(further_cleaning<span class="op">$</span>Setting)</a>
-<a class="sourceLine" id="cb31-39" title="39"></a>
-<a class="sourceLine" id="cb31-40" title="40"><span class="kw">str</span>(further_cleaning)</a></code></pre></div>
-<pre><code>## &#39;data.frame&#39;:    954 obs. of  22 variables:
-##  $ Action1         : Factor w/ 3 levels &quot;No&quot;,&quot;Unspecified&quot;,..: 2 2 2 3 3 2 2 2 2 2 ...
-##  $ CasesAll        : int  4 10 19 683 51 33 9 70 35 40 ...
-##  $ Country         : Factor w/ 21 levels &quot;Australia&quot;,&quot;Brazil&quot;,..: 16 16 11 11 16 11 11 16 16 16 ...
-##  $ Deaths          : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ EndMonth        : int  0 0 0 11 11 0 0 0 0 0 ...
-##  $ gg2c4           : Factor w/ 2 levels &quot;&quot;,&quot;Yes&quot;: 1 1 1 1 1 1 2 2 1 2 ...
-##  $ Hemisphere      : Factor w/ 2 levels &quot;Northern&quot;,&quot;Southern&quot;: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Hospitalizations: int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ MeanD1          : num  0 0 0 0 43 0 0 0 0 0 ...
-##  $ MeanI1          : int  0 0 0 31 32 0 0 0 0 0 ...
-##  $ MedianD1        : num  0 0 0 0 0 0 0 0 0 0 ...
-##  $ MedianI1        : int  0 0 0 0 33 0 0 0 0 0 ...
-##  $ OBYear          : num  2006 2006 2003 2003 2000 ...
-##  $ Path1           : Factor w/ 3 levels &quot;No&quot;,&quot;Unspecified&quot;,..: 2 2 2 3 1 2 2 2 2 2 ...
-##  $ RateAll         : num  100 83.3 33 44.2 65.3 ...
-##  $ RiskAll         : num  4 12 58 1492 72 ...
-##  $ season          : Factor w/ 4 levels &quot;Fall&quot;,&quot;Spring&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ StartMonth      : int  10 11 11 11 11 11 11 9 9 10 ...
-##  $ State           : Factor w/ 36 levels &quot;0&quot;,&quot;1&quot;,&quot;14 states: CA, UT, KS, WI, IL, IN, OH, GA, FL, NC, VA, WV, NY, PA,&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Trans1          : Factor w/ 6 levels &quot;Environmental&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...
-##  $ Vomit           : int  1 1 0 1 1 1 0 0 0 0 ...
-##  $ Setting         : Factor w/ 2 levels &quot;Other&quot;,&quot;Restaurant&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw">vis_dat</span>(further_cleaning)</a></code></pre></div>
-<p><img src="Tree_Fitting_files/figure-html/clean-more-predictors-1.png" width="672" /></p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="kw">summary</span>(further_cleaning<span class="op">$</span>Action1)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="co"># write code that performs the actions described above</span></a>
+<a class="sourceLine" id="cb25-2" title="2"><span class="co"># at the end, use the droplevels() command to remove empty factor levels</span></a>
+<a class="sourceLine" id="cb25-3" title="3"></a>
+<a class="sourceLine" id="cb25-4" title="4"><span class="co"># remove the unspecified entry and the level unspecified for hemisphere</span></a>
+<a class="sourceLine" id="cb25-5" title="5"><span class="co">#glimpse(removed_0OBYear$Hemisphere)</span></a>
+<a class="sourceLine" id="cb25-6" title="6">removeHemisphere &lt;-<span class="st"> </span>removed_0OBYear <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-7" title="7"><span class="st">  </span><span class="kw">subset</span>(Hemisphere <span class="op">!=</span><span class="st"> &quot;Unspecified&quot;</span>)</a>
+<a class="sourceLine" id="cb25-8" title="8"></a>
+<a class="sourceLine" id="cb25-9" title="9">removeHemisphere &lt;-<span class="st"> </span>removeHemisphere <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-10" title="10"><span class="st">  </span><span class="kw">droplevels</span>(removeHemisphere<span class="op">$</span>Hemisphere)</a>
+<a class="sourceLine" id="cb25-11" title="11"></a>
+<a class="sourceLine" id="cb25-12" title="12"><span class="co"># checking removeHemisphere let me see I only lost the one observation that was Unspecified for Hemisphere</span></a>
+<a class="sourceLine" id="cb25-13" title="13"><span class="co"># look at responses and levels in Action variable</span></a>
+<a class="sourceLine" id="cb25-14" title="14"><span class="co">#glimpse(removeHemisphere$Action1)</span></a>
+<a class="sourceLine" id="cb25-15" title="15">combineAction1 &lt;-<span class="st"> </span>removeHemisphere <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-16" title="16"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Action1=</span> <span class="kw">fct_recode</span>(Action1, <span class="st">&quot;Unspecified&quot;</span> =<span class="st"> &quot;Unknown&quot;</span>))</a>
+<a class="sourceLine" id="cb25-17" title="17"></a>
+<a class="sourceLine" id="cb25-18" title="18"><span class="co">#glimpse(combineAction1$Path1)</span></a>
+<a class="sourceLine" id="cb25-19" title="19">combinePath1 &lt;-<span class="st"> </span>combineAction1 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-20" title="20"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Path1=</span> <span class="kw">fct_recode</span>(Path1, <span class="st">&quot;Unspecified&quot;</span> =<span class="st"> &quot;Unknown&quot;</span>))</a>
+<a class="sourceLine" id="cb25-21" title="21"></a>
+<a class="sourceLine" id="cb25-22" title="22"><span class="co">#here is what worked for me to label the restaurants</span></a>
+<a class="sourceLine" id="cb25-23" title="23">restaurant_settings &lt;-<span class="st"> </span><span class="kw">subset</span>(combinePath1, Setting_<span class="dv">1</span> <span class="op">==</span><span class="st"> &quot;restaurant&quot;</span> <span class="op">|</span><span class="st"> </span>Setting_<span class="dv">1</span> <span class="op">==</span><span class="st"> &quot;Restaurant&quot;</span>)</a>
+<a class="sourceLine" id="cb25-24" title="24">other_settings &lt;-<span class="st"> </span><span class="kw">subset</span>(combinePath1, Setting_<span class="dv">1</span> <span class="op">!=</span><span class="st"> &quot;restaurant&quot;</span> <span class="op">&amp;</span><span class="st"> </span>Setting_<span class="dv">1</span> <span class="op">!=</span><span class="st"> &quot;Restaurant&quot;</span>)</a>
+<a class="sourceLine" id="cb25-25" title="25"></a>
+<a class="sourceLine" id="cb25-26" title="26">restaurant_settings_edit &lt;-<span class="st"> </span>restaurant_settings <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-27" title="27"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Setting =</span> <span class="st">&quot;Restaurant&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-28" title="28"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(Setting_<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb25-29" title="29">  </a>
+<a class="sourceLine" id="cb25-30" title="30">other_settings_edit &lt;-<span class="st"> </span>other_settings <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-31" title="31"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Setting =</span> <span class="st">&quot;Other&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-32" title="32"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(Setting_<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb25-33" title="33">  </a>
+<a class="sourceLine" id="cb25-34" title="34"><span class="co">#here I incorporated gtools (library loaded at top) to use smartbind and paste both of my subsets together. It appears to have worked, as I am back with 579 rows again. Let&#39;s glance and see...</span></a>
+<a class="sourceLine" id="cb25-35" title="35">further_cleaning &lt;-<span class="st"> </span><span class="kw">smartbind</span>(restaurant_settings_edit,other_settings_edit)</a>
+<a class="sourceLine" id="cb25-36" title="36"><span class="co">#str(further_cleaning)</span></a>
+<a class="sourceLine" id="cb25-37" title="37"></a>
+<a class="sourceLine" id="cb25-38" title="38">further_cleaning<span class="op">$</span>Setting &lt;-<span class="st"> </span><span class="kw">as.factor</span>(further_cleaning<span class="op">$</span>Setting)</a>
+<a class="sourceLine" id="cb25-39" title="39"></a>
+<a class="sourceLine" id="cb25-40" title="40"><span class="co">#str(further_cleaning)</span></a>
+<a class="sourceLine" id="cb25-41" title="41"><span class="co">#vis_dat(further_cleaning)</span></a>
+<a class="sourceLine" id="cb25-42" title="42"></a>
+<a class="sourceLine" id="cb25-43" title="43"><span class="kw">summary</span>(further_cleaning<span class="op">$</span>Action1)</a></code></pre></div>
 <pre><code>##          No Unspecified         Yes 
-##           1         744         209</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="co">#Get rid of the No observation</span></a>
-<a class="sourceLine" id="cb36-2" title="2">removed_Action1No &lt;-<span class="st"> </span>further_cleaning <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb36-3" title="3"><span class="st">  </span><span class="kw">subset</span>(Action1 <span class="op">!=</span><span class="st"> &quot;No&quot;</span>)</a>
-<a class="sourceLine" id="cb36-4" title="4"></a>
-<a class="sourceLine" id="cb36-5" title="5">removed_Action1No &lt;-<span class="st"> </span>removed_Action1No <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb36-6" title="6"><span class="st">  </span><span class="kw">droplevels</span>(removed_Action1No<span class="op">$</span>Action1)</a>
-<a class="sourceLine" id="cb36-7" title="7"></a>
-<a class="sourceLine" id="cb36-8" title="8"><span class="kw">summary</span>(removed_Action1No<span class="op">$</span>Action1)</a></code></pre></div>
+##           1         743         209</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="co">#Get rid of the No observation</span></a>
+<a class="sourceLine" id="cb27-2" title="2">removed_Action1No &lt;-<span class="st"> </span>further_cleaning <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb27-3" title="3"><span class="st">  </span><span class="kw">subset</span>(Action1 <span class="op">!=</span><span class="st"> &quot;No&quot;</span>)</a>
+<a class="sourceLine" id="cb27-4" title="4"></a>
+<a class="sourceLine" id="cb27-5" title="5">removed_Action1No &lt;-<span class="st"> </span>removed_Action1No <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb27-6" title="6"><span class="st">  </span><span class="kw">droplevels</span>(removed_Action1No<span class="op">$</span>Action1)</a>
+<a class="sourceLine" id="cb27-7" title="7"></a>
+<a class="sourceLine" id="cb27-8" title="8"><span class="kw">summary</span>(removed_Action1No<span class="op">$</span>Action1)</a></code></pre></div>
 <pre><code>## Unspecified         Yes 
-##         744         209</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="co">#removed the empty No level since that observation was dropped</span></a>
-<a class="sourceLine" id="cb38-2" title="2"></a>
-<a class="sourceLine" id="cb38-3" title="3">fixCountryFactors &lt;-<span class="st"> </span>removed_Action1No <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb38-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Country=</span> <span class="kw">fct_lump</span>(Country, <span class="dt">n=</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb38-5" title="5"><span class="co">#changed answers with multiple or unspecified in country to other. There is surely a cleaner way to do this.</span></a>
-<a class="sourceLine" id="cb38-6" title="6"></a>
-<a class="sourceLine" id="cb38-7" title="7"><span class="kw">summary</span>(fixCountryFactors<span class="op">$</span>Country)</a></code></pre></div>
+##         743         209</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="co">#removed the empty No level since that observation was dropped</span></a>
+<a class="sourceLine" id="cb29-2" title="2"></a>
+<a class="sourceLine" id="cb29-3" title="3">fixCountryFactors &lt;-<span class="st"> </span>removed_Action1No <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb29-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Country=</span> <span class="kw">fct_lump</span>(Country, <span class="dt">n=</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb29-5" title="5"><span class="co">#changed answers with multiple or unspecified in country to other. There is surely a cleaner way to do this.</span></a>
+<a class="sourceLine" id="cb29-6" title="6"></a>
+<a class="sourceLine" id="cb29-7" title="7"><span class="kw">summary</span>(fixCountryFactors<span class="op">$</span>Country)</a></code></pre></div>
 <pre><code>## Japan   USA Other 
-##   371   106   476</code></pre>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="kw">summary</span>(fixCountryFactors<span class="op">$</span>Trans1)</a></code></pre></div>
+##   371   106   475</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">summary</span>(fixCountryFactors<span class="op">$</span>Trans1)</a></code></pre></div>
 <pre><code>##    Environmental        Foodborne Person to Person          Unknown 
-##               11              373              151               63 
+##               11              373              150               63 
 ##      Unspecified       Waterborne 
 ##              283               72</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"><span class="co">#move waterborne into environmental</span></a>
-<a class="sourceLine" id="cb42-2" title="2">mergeWaterborne_environmental &lt;-<span class="st"> </span>fixCountryFactors <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb42-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Trans1=</span> <span class="kw">fct_recode</span>(Trans1, <span class="st">&quot;Environmental&quot;</span> =<span class="st"> &quot;Waterborne&quot;</span>))</a>
-<a class="sourceLine" id="cb42-4" title="4"></a>
-<a class="sourceLine" id="cb42-5" title="5"><span class="kw">summary</span>(mergeWaterborne_environmental<span class="op">$</span>Trans1)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="co">#move waterborne into environmental</span></a>
+<a class="sourceLine" id="cb33-2" title="2">mergeWaterborne_environmental &lt;-<span class="st"> </span>fixCountryFactors <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb33-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Trans1=</span> <span class="kw">fct_recode</span>(Trans1, <span class="st">&quot;Environmental&quot;</span> =<span class="st"> &quot;Waterborne&quot;</span>))</a>
+<a class="sourceLine" id="cb33-4" title="4"></a>
+<a class="sourceLine" id="cb33-5" title="5"><span class="kw">summary</span>(mergeWaterborne_environmental<span class="op">$</span>Trans1)</a></code></pre></div>
 <pre><code>##    Environmental        Foodborne Person to Person          Unknown 
-##               83              373              151               63 
+##               83              373              150               63 
 ##      Unspecified 
 ##              283</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="kw">summary</span>(mergeWaterborne_environmental<span class="op">$</span>season)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw">summary</span>(mergeWaterborne_environmental<span class="op">$</span>season)</a></code></pre></div>
 <pre><code>##   Fall Spring Summer Winter 
-##    164    222    125    442</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">season_first &lt;-<span class="st"> </span>mergeWaterborne_environmental <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb46-2" title="2"><span class="st">  </span><span class="kw">select</span>(season, <span class="kw">everything</span>())</a>
-<a class="sourceLine" id="cb46-3" title="3"></a>
-<a class="sourceLine" id="cb46-4" title="4"><span class="kw">summary</span>(season_first)</a></code></pre></div>
+##    164    222    125    441</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">dropStateVar &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(mergeWaterborne_environmental, <span class="op">-</span><span class="kw">c</span>(State))</a>
+<a class="sourceLine" id="cb37-2" title="2"><span class="kw">head</span>(dropStateVar)</a></code></pre></div>
+<pre><code>##       Action1 CasesAll Country Deaths EndMonth gg2c4 Hemisphere
+## 1 Unspecified        4   Other      0        0         Northern
+## 2 Unspecified       10   Other      0        0         Northern
+## 3 Unspecified       19   Japan      0        0         Northern
+## 4         Yes      683   Japan      0       11         Northern
+## 5         Yes       51   Other      0       11         Northern
+## 6 Unspecified       33   Japan      0        0         Northern
+##   Hospitalizations MeanD1 MeanI1 MedianD1 MedianI1 OBYear       Path1
+## 1                0      0      0        0        0   2006 Unspecified
+## 2                0      0      0        0        0   2006 Unspecified
+## 3                0      0      0        0        0   2003 Unspecified
+## 4                0      0     31        0        0   2003         Yes
+## 5                0     43     32        0       33   2000          No
+## 6                0      0      0        0        0   1998 Unspecified
+##     RateAll RiskAll season StartMonth    Trans1 Vomit    Setting
+## 1 100.00000       4   Fall         10 Foodborne     1 Restaurant
+## 2  83.33333      12   Fall         11 Foodborne     1 Restaurant
+## 3  33.00000      58   Fall         11 Foodborne     0 Restaurant
+## 4  44.20000    1492   Fall         11 Foodborne     1 Restaurant
+## 5  65.27778      72   Fall         11 Foodborne     1 Restaurant
+## 6  62.26415      53   Fall         11 Foodborne     1 Restaurant</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">Vomiting &lt;-<span class="st"> </span><span class="kw">as.factor</span>(dropStateVar<span class="op">$</span>Vomit)</a>
+<a class="sourceLine" id="cb39-2" title="2"></a>
+<a class="sourceLine" id="cb39-3" title="3">makeVomit_factor &lt;-<span class="st"> </span>dropStateVar <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb39-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(Vomiting) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb39-5" title="5"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(Vomit))</a>
+<a class="sourceLine" id="cb39-6" title="6"></a>
+<a class="sourceLine" id="cb39-7" title="7"><span class="kw">head</span>(makeVomit_factor)</a></code></pre></div>
+<pre><code>##       Action1 CasesAll Country Deaths EndMonth gg2c4 Hemisphere
+## 1 Unspecified        4   Other      0        0         Northern
+## 2 Unspecified       10   Other      0        0         Northern
+## 3 Unspecified       19   Japan      0        0         Northern
+## 4         Yes      683   Japan      0       11         Northern
+## 5         Yes       51   Other      0       11         Northern
+## 6 Unspecified       33   Japan      0        0         Northern
+##   Hospitalizations MeanD1 MeanI1 MedianD1 MedianI1 OBYear       Path1
+## 1                0      0      0        0        0   2006 Unspecified
+## 2                0      0      0        0        0   2006 Unspecified
+## 3                0      0      0        0        0   2003 Unspecified
+## 4                0      0     31        0        0   2003         Yes
+## 5                0     43     32        0       33   2000          No
+## 6                0      0      0        0        0   1998 Unspecified
+##     RateAll RiskAll season StartMonth    Trans1    Setting Vomiting
+## 1 100.00000       4   Fall         10 Foodborne Restaurant        1
+## 2  83.33333      12   Fall         11 Foodborne Restaurant        1
+## 3  33.00000      58   Fall         11 Foodborne Restaurant        0
+## 4  44.20000    1492   Fall         11 Foodborne Restaurant        1
+## 5  65.27778      72   Fall         11 Foodborne Restaurant        1
+## 6  62.26415      53   Fall         11 Foodborne Restaurant        1</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">season_first &lt;-<span class="st"> </span>makeVomit_factor <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb41-2" title="2"><span class="st">  </span><span class="kw">select</span>(season, <span class="kw">everything</span>())</a>
+<a class="sourceLine" id="cb41-3" title="3"></a>
+<a class="sourceLine" id="cb41-4" title="4"><span class="kw">summary</span>(season_first)</a></code></pre></div>
 <pre><code>##     season           Action1       CasesAll        Country   
-##  Fall  :164   Unspecified:744   Min.   :    1.0   Japan:371  
+##  Fall  :164   Unspecified:743   Min.   :    1.0   Japan:371  
 ##  Spring:222   Yes        :209   1st Qu.:    9.0   USA  :106  
-##  Summer:125                     Median :   25.0   Other:476  
-##  Winter:442                     Mean   :  129.1              
-##                                 3rd Qu.:   64.0              
+##  Summer:125                     Median :   25.0   Other:475  
+##  Winter:441                     Mean   :  129.0              
+##                                 3rd Qu.:   63.5              
 ##                                 Max.   :32150.0              
 ##                                 NA&#39;s   :5                    
 ##      Deaths           EndMonth      gg2c4        Hemisphere 
-##  Min.   :0.00000   Min.   : 0.000      :676   Northern:873  
-##  1st Qu.:0.00000   1st Qu.: 0.000   Yes:277   Southern: 80  
+##  Min.   :0.00000   Min.   : 0.000      :676   Northern:872  
+##  1st Qu.:0.00000   1st Qu.: 0.000   Yes:276   Southern: 80  
 ##  Median :0.00000   Median : 0.000                           
-##  Mean   :0.05379   Mean   : 2.558                           
+##  Mean   :0.05385   Mean   : 2.555                           
 ##  3rd Qu.:0.00000   3rd Qu.: 4.000                           
 ##  Max.   :9.00000   Max.   :12.000                           
 ##  NA&#39;s   :42                                                 
-##  Hospitalizations       MeanD1            MeanI1           MedianD1      
-##  Min.   :  0.0000   Min.   :  0.000   Min.   : 0.0000   Min.   :  0.000  
-##  1st Qu.:  0.0000   1st Qu.:  0.000   1st Qu.: 0.0000   1st Qu.:  0.000  
-##  Median :  0.0000   Median :  0.000   Median : 0.0000   Median :  0.000  
-##  Mean   :  0.9275   Mean   :  1.692   Mean   : 0.7125   Mean   :  2.611  
-##  3rd Qu.:  0.0000   3rd Qu.:  0.000   3rd Qu.: 0.0000   3rd Qu.:  0.000  
-##  Max.   :197.0000   Max.   :273.600   Max.   :48.0000   Max.   :235.200  
-##  NA&#39;s   :42                                                              
+##  Hospitalizations       MeanD1           MeanI1           MedianD1      
+##  Min.   :  0.0000   Min.   :  0.00   Min.   : 0.0000   Min.   :  0.000  
+##  1st Qu.:  0.0000   1st Qu.:  0.00   1st Qu.: 0.0000   1st Qu.:  0.000  
+##  Median :  0.0000   Median :  0.00   Median : 0.0000   Median :  0.000  
+##  Mean   :  0.7121   Mean   :  1.56   Mean   : 0.7132   Mean   :  2.614  
+##  3rd Qu.:  0.0000   3rd Qu.:  0.00   3rd Qu.: 0.0000   3rd Qu.:  0.000  
+##  Max.   :125.0000   Max.   :273.60   Max.   :48.0000   Max.   :235.200  
+##  NA&#39;s   :42                                                             
 ##     MedianI1          OBYear             Path1        RateAll      
 ##  Min.   : 0.000   Min.   :1983   No         :197   Min.   :  0.00  
-##  1st Qu.: 0.000   1st Qu.:2000   Unspecified:678   1st Qu.:  0.00  
+##  1st Qu.: 0.000   1st Qu.:2000   Unspecified:677   1st Qu.:  0.00  
 ##  Median : 0.000   Median :2003   Yes        : 78   Median : 16.50  
-##  Mean   : 1.703   Mean   :2002                     Mean   : 27.04  
+##  Mean   : 1.705   Mean   :2002                     Mean   : 27.04  
 ##  3rd Qu.: 0.000   3rd Qu.:2005                     3rd Qu.: 49.00  
 ##  Max.   :65.000   Max.   :2010                     Max.   :105.00  
-##                   NA&#39;s   :1                        NA&#39;s   :103     
-##     RiskAll          StartMonth         State                  Trans1   
-##  Min.   :    0.0   Min.   : 0.000   0      :842   Environmental   : 83  
-##  1st Qu.:    0.0   1st Qu.: 2.000   NC     : 18   Foodborne       :373  
-##  Median :   20.5   Median : 5.000   NY     : 10   Person to Person:151  
-##  Mean   :  399.7   Mean   : 5.895   AK     :  9   Unknown         : 63  
-##  3rd Qu.:  110.8   3rd Qu.:10.000   FL     :  7   Unspecified     :283  
-##  Max.   :35000.0   Max.   :12.000   MI     :  6                         
-##  NA&#39;s   :115                        (Other): 61                         
-##      Vomit              Setting   
-##  Min.   :0.0000   Other     :779  
-##  1st Qu.:0.0000   Restaurant:174  
-##  Median :1.0000                   
-##  Mean   :0.5063                   
-##  3rd Qu.:1.0000                   
-##  Max.   :1.0000                   
-##  NA&#39;s   :1</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co">#season_first</span></a></code></pre></div>
-</div>
-<div id="data-visualization" class="section level1">
-<h1>Data visualization</h1>
-<p>We know our data fairly well by now, so we might not discover much new in any plots, but it’s always good to do them anyway. Let’s create a few plots showing the outcome and the predictors. We’ll start with the continuous predictors. I suggest scatter/box/violin plots with the outcome on the x-axis.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="co">#write code that produces plots showing our outcome of interest on the x-axis and each numeric predictor on the y-axis.</span></a>
-<a class="sourceLine" id="cb49-2" title="2"><span class="co">#you can use the facet_wrap functionality in ggplot for it, or do it some other way.</span></a>
-<a class="sourceLine" id="cb49-3" title="3">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, OBYear)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a>
-<a class="sourceLine" id="cb49-4" title="4"></a>
-<a class="sourceLine" id="cb49-5" title="5">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, RiskAll)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a>
-<a class="sourceLine" id="cb49-6" title="6"></a>
-<a class="sourceLine" id="cb49-7" title="7">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, MeanD1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_violin</span>()</a>
-<a class="sourceLine" id="cb49-8" title="8"></a>
-<a class="sourceLine" id="cb49-9" title="9">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, MedianD1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_violin</span>()</a>
-<a class="sourceLine" id="cb49-10" title="10"></a>
-<a class="sourceLine" id="cb49-11" title="11">p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, RateAll)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_violin</span>()</a>
-<a class="sourceLine" id="cb49-12" title="12"></a>
-<a class="sourceLine" id="cb49-13" title="13"><span class="kw">grid.arrange</span>(p1, p2, p3, p4, p5, <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
-<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_boxplot).</code></pre>
-<pre><code>## Warning: Removed 115 rows containing missing values (geom_point).</code></pre>
-<pre><code>## Warning: Removed 103 rows containing non-finite values (stat_ydensity).</code></pre>
-<p><img src="Tree_Fitting_files/figure-html/plots-1-1.png" width="672" /></p>
-<p>Things look ok, apart from the skew in the predictors we discussed previously.</p>
-<p>Next, let’s create plots for the categorical variables. You can use, for instance, <code>geom_count</code> for it, or some other representation. If you prefer lots of tables, that’s ok too.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="co">#write code that produces plots or tables showing our outcome of interest and each categorical predictor.</span></a>
-<a class="sourceLine" id="cb53-2" title="2"></a>
-<a class="sourceLine" id="cb53-3" title="3"><span class="co"># I still need to fix these up a bit</span></a>
-<a class="sourceLine" id="cb53-4" title="4">p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Action1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-5" title="5">p6 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Path1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-6" title="6">p7 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Setting)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-7" title="7">p8 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Hemisphere)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-8" title="8">p9 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Country)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-9" title="9">p10 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Trans1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-10" title="10">p11 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, season)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
-<a class="sourceLine" id="cb53-11" title="11"></a>
-<a class="sourceLine" id="cb53-12" title="12"><span class="kw">grid.arrange</span>(p5, p6, p7, p8, p9, p10, p11, <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">widths=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="fl">1.15</span>))</a></code></pre></div>
-<p><img src="Tree_Fitting_files/figure-html/plots-2-1.png" width="672" /></p>
-<p>Looks ok. Notice the NA for vomiting. We are ok with that for now.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="kw">dim</span>(season_first)</a></code></pre></div>
-<pre><code>## [1] 953  22</code></pre>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="kw">str</span>(season_first)</a></code></pre></div>
-<pre><code>## &#39;data.frame&#39;:    953 obs. of  22 variables:
+##                                                    NA&#39;s   :102     
+##     RiskAll          StartMonth                  Trans1   
+##  Min.   :    0.0   Min.   : 0.000   Environmental   : 83  
+##  1st Qu.:    0.0   1st Qu.: 2.000   Foodborne       :373  
+##  Median :   20.5   Median : 5.000   Person to Person:150  
+##  Mean   :  399.7   Mean   : 5.894   Unknown         : 63  
+##  3rd Qu.:  110.8   3rd Qu.:10.000   Unspecified     :283  
+##  Max.   :35000.0   Max.   :12.000                         
+##  NA&#39;s   :114                                              
+##        Setting    Vomiting  
+##  Other     :778   0   :469  
+##  Restaurant:174   1   :482  
+##                   NA&#39;s:  1  
+##                             
+##                             
+##                             
+## </code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw">str</span>(season_first)</a></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    952 obs. of  21 variables:
 ##  $ season          : Factor w/ 4 levels &quot;Fall&quot;,&quot;Spring&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ Action1         : Factor w/ 2 levels &quot;Unspecified&quot;,..: 1 1 1 2 2 1 1 1 1 1 ...
 ##  $ CasesAll        : int  4 10 19 683 51 33 9 70 35 40 ...
@@ -4418,30 +4362,95 @@ div.tocify {
 ##  $ RateAll         : num  100 83.3 33 44.2 65.3 ...
 ##  $ RiskAll         : num  4 12 58 1492 72 ...
 ##  $ StartMonth      : int  10 11 11 11 11 11 11 9 9 10 ...
-##  $ State           : Factor w/ 36 levels &quot;0&quot;,&quot;1&quot;,&quot;14 states: CA, UT, KS, WI, IL, IN, OH, GA, FL, NC, VA, WV, NY, PA,&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ Trans1          : Factor w/ 5 levels &quot;Environmental&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...
-##  $ Vomit           : int  1 1 0 1 1 1 0 0 0 0 ...
-##  $ Setting         : Factor w/ 2 levels &quot;Other&quot;,&quot;Restaurant&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="kw">vis_dat</span>(season_first)</a></code></pre></div>
+##  $ Setting         : Factor w/ 2 levels &quot;Other&quot;,&quot;Restaurant&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ Vomiting        : Factor w/ 2 levels &quot;0&quot;,&quot;1&quot;: 2 2 1 2 2 2 1 1 1 1 ...</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">vis_dat</span>(season_first)</a></code></pre></div>
+<p><img src="Tree_Fitting_files/figure-html/clean-more-predictors-1.png" width="672" /></p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1"><span class="co">#season_first</span></a></code></pre></div>
+</div>
+<div id="data-visualization" class="section level1">
+<h1>Data visualization</h1>
+<p>We know our data fairly well by now, so we might not discover much new in any plots, but it’s always good to do them anyway. Let’s create a few plots showing the outcome and the predictors. We’ll start with the continuous predictors. I suggest scatter/box/violin plots with the outcome on the x-axis.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co">#write code that produces plots showing our outcome of interest on the x-axis and each numeric predictor on the y-axis.</span></a>
+<a class="sourceLine" id="cb47-2" title="2"><span class="co">#you can use the facet_wrap functionality in ggplot for it, or do it some other way.</span></a>
+<a class="sourceLine" id="cb47-3" title="3">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, OBYear)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a>
+<a class="sourceLine" id="cb47-4" title="4"></a>
+<a class="sourceLine" id="cb47-5" title="5">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, RiskAll)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a>
+<a class="sourceLine" id="cb47-6" title="6"></a>
+<a class="sourceLine" id="cb47-7" title="7">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, MeanD1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_violin</span>()</a>
+<a class="sourceLine" id="cb47-8" title="8"></a>
+<a class="sourceLine" id="cb47-9" title="9">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, MedianD1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_violin</span>()</a>
+<a class="sourceLine" id="cb47-10" title="10"></a>
+<a class="sourceLine" id="cb47-11" title="11">p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, RateAll)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_violin</span>()</a>
+<a class="sourceLine" id="cb47-12" title="12"></a>
+<a class="sourceLine" id="cb47-13" title="13"><span class="kw">grid.arrange</span>(p1, p2, p3, p4, p5, <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
+<pre><code>## Warning: Removed 114 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 102 rows containing non-finite values (stat_ydensity).</code></pre>
+<p><img src="Tree_Fitting_files/figure-html/plots-1-1.png" width="672" /></p>
+<p>Things look ok, apart from the skew in the predictors we discussed previously.</p>
+<p>Next, let’s create plots for the categorical variables. You can use, for instance, <code>geom_count</code> for it, or some other representation. If you prefer lots of tables, that’s ok too.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="co">#write code that produces plots or tables showing our outcome of interest and each categorical predictor.</span></a>
+<a class="sourceLine" id="cb50-2" title="2"></a>
+<a class="sourceLine" id="cb50-3" title="3"><span class="co"># I still need to fix these up a bit</span></a>
+<a class="sourceLine" id="cb50-4" title="4">p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Action1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb50-5" title="5">p6 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Path1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb50-6" title="6">p7 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Setting)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb50-7" title="7">p8 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Hemisphere)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb50-8" title="8">p9 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Country)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb50-9" title="9">p10 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Trans1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb50-10" title="10">p11 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, gg2c4)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb50-11" title="11">p12 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(season_first, <span class="kw">aes</span>(season, Vomiting)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_count</span>()</a>
+<a class="sourceLine" id="cb50-12" title="12"></a>
+<a class="sourceLine" id="cb50-13" title="13"></a>
+<a class="sourceLine" id="cb50-14" title="14"><span class="kw">grid.arrange</span>(p5, p6, p7, p8, p9, p10, p11, p12, <span class="dt">ncol=</span><span class="dv">2</span>, <span class="dt">nrow=</span><span class="dv">4</span>)</a></code></pre></div>
+<p><img src="Tree_Fitting_files/figure-html/plots-2-1.png" width="672" /></p>
+<p>Looks ok. Notice the NA for vomiting. We are ok with that for now.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="kw">dim</span>(season_first)</a></code></pre></div>
+<pre><code>## [1] 952  21</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="kw">str</span>(season_first)</a></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    952 obs. of  21 variables:
+##  $ season          : Factor w/ 4 levels &quot;Fall&quot;,&quot;Spring&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Action1         : Factor w/ 2 levels &quot;Unspecified&quot;,..: 1 1 1 2 2 1 1 1 1 1 ...
+##  $ CasesAll        : int  4 10 19 683 51 33 9 70 35 40 ...
+##  $ Country         : Factor w/ 3 levels &quot;Japan&quot;,&quot;USA&quot;,..: 3 3 1 1 3 1 1 3 3 3 ...
+##  $ Deaths          : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ EndMonth        : int  0 0 0 11 11 0 0 0 0 0 ...
+##  $ gg2c4           : Factor w/ 2 levels &quot;&quot;,&quot;Yes&quot;: 1 1 1 1 1 1 2 2 1 2 ...
+##  $ Hemisphere      : Factor w/ 2 levels &quot;Northern&quot;,&quot;Southern&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Hospitalizations: int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ MeanD1          : num  0 0 0 0 43 0 0 0 0 0 ...
+##  $ MeanI1          : int  0 0 0 31 32 0 0 0 0 0 ...
+##  $ MedianD1        : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ MedianI1        : int  0 0 0 0 33 0 0 0 0 0 ...
+##  $ OBYear          : num  2006 2006 2003 2003 2000 ...
+##  $ Path1           : Factor w/ 3 levels &quot;No&quot;,&quot;Unspecified&quot;,..: 2 2 2 3 1 2 2 2 2 2 ...
+##  $ RateAll         : num  100 83.3 33 44.2 65.3 ...
+##  $ RiskAll         : num  4 12 58 1492 72 ...
+##  $ StartMonth      : int  10 11 11 11 11 11 11 9 9 10 ...
+##  $ Trans1          : Factor w/ 5 levels &quot;Environmental&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ Setting         : Factor w/ 2 levels &quot;Other&quot;,&quot;Restaurant&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ Vomiting        : Factor w/ 2 levels &quot;0&quot;,&quot;1&quot;: 2 2 1 2 2 2 1 1 1 1 ...</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="kw">vis_dat</span>(season_first)</a></code></pre></div>
 <p><img src="Tree_Fitting_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>At this step, you should have a dataframe containing 952 observations, and 21 variables: 1 outcome, 12 numeric/integer predictors, and 8 factor variables. All variables should have values that are ready for analysis. The outcome should be in the 1st slot.</p>
 </div>
 <div id="data-splitting" class="section level1">
 <h1>Data splitting</h1>
 <p>Let’s do data splitting again. Use <code>caret</code> functions (or any other way you like) to split the data into 70/30 train/test portions.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="co">#write code that splits data into 70/30 train/test</span></a>
-<a class="sourceLine" id="cb59-2" title="2"><span class="co">#call the 2 parts data_train and data_test</span></a>
-<a class="sourceLine" id="cb59-3" title="3"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb59-4" title="4">trainset &lt;-<span class="st"> </span>caret<span class="op">::</span><span class="kw">createDataPartition</span>(<span class="dt">y =</span> season_first<span class="op">$</span>season, <span class="dt">p =</span> <span class="fl">0.7</span>, <span class="dt">list =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb59-5" title="5">data_train =<span class="st"> </span>season_first[trainset,]</a>
-<a class="sourceLine" id="cb59-6" title="6">data_test =<span class="st"> </span>season_first[<span class="op">-</span>trainset,]</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="co">#write code that splits data into 70/30 train/test</span></a>
+<a class="sourceLine" id="cb56-2" title="2"><span class="co">#call the 2 parts data_train and data_test</span></a>
+<a class="sourceLine" id="cb56-3" title="3"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb56-4" title="4">trainset &lt;-<span class="st"> </span>caret<span class="op">::</span><span class="kw">createDataPartition</span>(<span class="dt">y =</span> season_first<span class="op">$</span>season, <span class="dt">p =</span> <span class="fl">0.7</span>, <span class="dt">list =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb56-5" title="5">data_train =<span class="st"> </span>season_first[trainset,]</a>
+<a class="sourceLine" id="cb56-6" title="6">data_test =<span class="st"> </span>season_first[<span class="op">-</span>trainset,]</a></code></pre></div>
 </div>
 <div id="parallelization" class="section level1">
 <h1>Parallelization</h1>
 <p>Similar to <code>mlr</code>, <code>caret</code> allows you to use multiple processors at the same time. It is easy to set up, and the few lines below do the trick.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">n_cores &lt;-<span class="st"> </span><span class="dv">4</span> <span class="co">#number of cores to use</span></a>
-<a class="sourceLine" id="cb60-2" title="2">cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(n_cores)</a>
-<a class="sourceLine" id="cb60-3" title="3"><span class="kw">registerDoParallel</span>(cl) <span class="co">#comment out this line if you don&#39;t want parallel computing</span></a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1">n_cores &lt;-<span class="st"> </span><span class="dv">4</span> <span class="co">#number of cores to use</span></a>
+<a class="sourceLine" id="cb57-2" title="2">cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(n_cores)</a>
+<a class="sourceLine" id="cb57-3" title="3"><span class="kw">registerDoParallel</span>(cl) <span class="co">#comment out this line if you don&#39;t want parallel computing</span></a></code></pre></div>
 </div>
 <div id="model-fitting" class="section level1">
 <h1>Model fitting</h1>
@@ -4449,82 +4458,81 @@ div.tocify {
 <div id="a-null-model" class="section level2">
 <h2>A null model</h2>
 <p>To define a null model, we need to determine what performance measure we want to track. Since we now have a categorical outcome with more than 2 categories, the regular 2x2 table/confusion matrix, and measurements that rely on it don’t quite work, though many of them have versions that go beyond the 2x2 table. To keep things simple, we will use accuracy, which is simply the fraction of correct predictions. It is easy to compute, no matter how many categories we have. The null model still predicts the most frequent category. We can use that as baseline performance.</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co">#write code that computes accuracy for a null model that always predicts the most common category</span></a>
-<a class="sourceLine" id="cb61-2" title="2"></a>
-<a class="sourceLine" id="cb61-3" title="3"><span class="co">#data_train$season</span></a>
-<a class="sourceLine" id="cb61-4" title="4"><span class="co">#length(data_train$season)</span></a>
-<a class="sourceLine" id="cb61-5" title="5"></a>
-<a class="sourceLine" id="cb61-6" title="6">frequencies &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">summary</span>(data_train<span class="op">$</span>season))</a>
-<a class="sourceLine" id="cb61-7" title="7"></a>
-<a class="sourceLine" id="cb61-8" title="8">null_model &lt;-<span class="st"> </span><span class="kw">max</span>(frequencies)<span class="op">/</span><span class="kw">length</span>(data_train<span class="op">$</span>season)</a>
-<a class="sourceLine" id="cb61-9" title="9">null_model</a></code></pre></div>
-<pre><code>## [1] 0.4633782</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="co">#write code that computes accuracy for a null model that always predicts the most common category</span></a>
+<a class="sourceLine" id="cb58-2" title="2"></a>
+<a class="sourceLine" id="cb58-3" title="3"><span class="co">#data_train$season</span></a>
+<a class="sourceLine" id="cb58-4" title="4"><span class="co">#length(data_train$season)</span></a>
+<a class="sourceLine" id="cb58-5" title="5"></a>
+<a class="sourceLine" id="cb58-6" title="6">frequencies &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">summary</span>(data_train<span class="op">$</span>season))</a>
+<a class="sourceLine" id="cb58-7" title="7"></a>
+<a class="sourceLine" id="cb58-8" title="8">null_model &lt;-<span class="st"> </span><span class="kw">max</span>(frequencies)<span class="op">/</span><span class="kw">length</span>(data_train<span class="op">$</span>season)</a>
+<a class="sourceLine" id="cb58-9" title="9">null_model</a></code></pre></div>
+<pre><code>## [1] 0.4625749</code></pre>
 <p>You should find that the null model has an accuracy of around 0.46.</p>
 </div>
 <div id="single-predictor-models" class="section level2">
 <h2>Single predictor models</h2>
 <p>Now let’s consider single predictor models, i.e., we’ll fit the outcome to each predictor one at a time to get an idea of the importance of individual predictors. Here, our model will be a tree. I’m actually not so sure if this makes a lot of sense since a “tree” with only one predictor seems a bit silly. But I guess we can try. It’s similar to a 1-predictor GLM.</p>
 <p>We’ll also do some parameter tuning here. Looking at the <a href="http://topepo.github.io/caret/available-models.html">caret documentation</a>, we find that the tuning parameter for the <code>rpart</code> model (which is the tree algorithm) is called <code>cp</code>. We could also find that using <code>modelLookup("rpart")</code>. We could either specify a grid of values to try for <code>cp</code> (we’ll use a grid below), or, for a single tuning parameter, <code>caret</code> allows one to set the number of values to try and picks those values automatically. We’ll do the latter approach here.</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co">#There is probably a nicer tidyverse way of doing this. I just couldn&#39;t think of it, so did it this way.</span></a>
-<a class="sourceLine" id="cb63-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
-<a class="sourceLine" id="cb63-3" title="3">outcomename =<span class="st"> &quot;season&quot;</span></a>
-<a class="sourceLine" id="cb63-4" title="4">fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>) <span class="co">#setting CV method for caret</span></a>
-<a class="sourceLine" id="cb63-5" title="5">Npred &lt;-<span class="st"> </span><span class="kw">ncol</span>(data_train)<span class="op">-</span><span class="dv">1</span> <span class="co"># number of predictors</span></a>
-<a class="sourceLine" id="cb63-6" title="6">resultmat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Variable =</span> <span class="kw">names</span>(data_train)[<span class="op">-</span><span class="dv">1</span>], <span class="dt">Accuracy =</span> <span class="kw">rep</span>(<span class="dv">0</span>,Npred)) <span class="co">#store performance for each variable</span></a>
-<a class="sourceLine" id="cb63-7" title="7"><span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="kw">ncol</span>(data_train)) <span class="co">#loop over each predictor. For this to work, outcome must be in 1st column</span></a>
-<a class="sourceLine" id="cb63-8" title="8">{</a>
-<a class="sourceLine" id="cb63-9" title="9">  fit1 &lt;-<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>( <span class="kw">as.formula</span>(<span class="kw">paste</span>(outcomename, <span class="st">&quot;~&quot;</span>, <span class="kw">names</span>(data_train)[n])), <span class="dt">data =</span> data_train, <span class="dt">method =</span> <span class="st">&quot;rpart&quot;</span>, <span class="dt">trControl =</span> fitControl, <span class="dt">na.action =</span> na.pass, <span class="dt">tuneLength =</span> <span class="dv">10</span>) </a>
-<a class="sourceLine" id="cb63-10" title="10">resultmat[n<span class="dv">-1</span>,<span class="dv">2</span>]=<span class="st"> </span><span class="kw">max</span>(fit1<span class="op">$</span>results<span class="op">$</span>Accuracy)  </a>
-<a class="sourceLine" id="cb63-11" title="11">}</a>
-<a class="sourceLine" id="cb63-12" title="12"><span class="kw">print</span>(resultmat)</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="co">#There is probably a nicer tidyverse way of doing this. I just couldn&#39;t think of it, so did it this way.</span></a>
+<a class="sourceLine" id="cb60-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
+<a class="sourceLine" id="cb60-3" title="3">outcomename =<span class="st"> &quot;season&quot;</span></a>
+<a class="sourceLine" id="cb60-4" title="4">fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>) <span class="co">#setting CV method for caret</span></a>
+<a class="sourceLine" id="cb60-5" title="5">Npred &lt;-<span class="st"> </span><span class="kw">ncol</span>(data_train)<span class="op">-</span><span class="dv">1</span> <span class="co"># number of predictors</span></a>
+<a class="sourceLine" id="cb60-6" title="6">resultmat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Variable =</span> <span class="kw">names</span>(data_train)[<span class="op">-</span><span class="dv">1</span>], <span class="dt">Accuracy =</span> <span class="kw">rep</span>(<span class="dv">0</span>,Npred)) <span class="co">#store performance for each variable</span></a>
+<a class="sourceLine" id="cb60-7" title="7"><span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="kw">ncol</span>(data_train)) <span class="co">#loop over each predictor. For this to work, outcome must be in 1st column</span></a>
+<a class="sourceLine" id="cb60-8" title="8">{</a>
+<a class="sourceLine" id="cb60-9" title="9">  fit1 &lt;-<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>( <span class="kw">as.formula</span>(<span class="kw">paste</span>(outcomename, <span class="st">&quot;~&quot;</span>, <span class="kw">names</span>(data_train)[n])), <span class="dt">data =</span> data_train, <span class="dt">method =</span> <span class="st">&quot;rpart&quot;</span>, <span class="dt">trControl =</span> fitControl, <span class="dt">na.action =</span> na.pass, <span class="dt">tuneLength =</span> <span class="dv">10</span>) </a>
+<a class="sourceLine" id="cb60-10" title="10">resultmat[n<span class="dv">-1</span>,<span class="dv">2</span>]=<span class="st"> </span><span class="kw">max</span>(fit1<span class="op">$</span>results<span class="op">$</span>Accuracy)  </a>
+<a class="sourceLine" id="cb60-11" title="11">}</a>
+<a class="sourceLine" id="cb60-12" title="12"><span class="kw">print</span>(resultmat)</a></code></pre></div>
 <pre><code>##            Variable  Accuracy
-## 1           Action1 0.4633865
-## 2          CasesAll 0.4568194
-## 3           Country 0.4580066
-## 4            Deaths 0.4607083
-## 5          EndMonth 0.6128477
-## 6             gg2c4 0.4633885
-## 7        Hemisphere 0.4603896
-## 8  Hospitalizations 0.4627871
-## 9            MeanD1 0.4678641
-## 10           MeanI1 0.4660795
-## 11         MedianD1 0.4586122
-## 12         MedianI1 0.4565026
-## 13           OBYear 0.4678929
-## 14            Path1 0.4601008
-## 15          RateAll 0.4538317
-## 16          RiskAll 0.4801097
-## 17       StartMonth 0.8998854
-## 18            State 0.4633906
-## 19           Trans1 0.4570819
-## 20            Vomit 0.4633885
-## 21          Setting 0.4633906</code></pre>
+## 1           Action1 0.4625783
+## 2          CasesAll 0.4655341
+## 3           Country 0.4589983
+## 4            Deaths 0.4586794
+## 5          EndMonth 0.6116057
+## 6             gg2c4 0.4625807
+## 7        Hemisphere 0.4586547
+## 8  Hospitalizations 0.4628744
+## 9            MeanD1 0.4637748
+## 10           MeanI1 0.4655793
+## 11         MedianD1 0.4586859
+## 12         MedianI1 0.4562986
+## 13           OBYear 0.4667633
+## 14            Path1 0.4625802
+## 15          RateAll 0.4553937
+## 16          RiskAll 0.4790526
+## 17       StartMonth 0.9026629
+## 18           Trans1 0.4559818
+## 19          Setting 0.4625785
+## 20         Vomiting 0.4625799</code></pre>
 <p>So it looks like most of the single predictor models don’t have accuracy much better than the null. 2 exceptions are <code>StartMonth</code> and <code>EndMonth</code>. Well, we would expect that the outbreak season and the month at which the outbreak started (and ended) have a strong correlation. I kept those variables here to see if that would happen and get some reassurance that our model works ok. Of course, in a real analysis, keeping those seems silly, we wouldn’t learn much from it (other than data entry appeared to have been done ok).</p>
 </div>
 </div>
 <div id="full-model" class="section level1">
 <h1>Full model</h1>
 <p>Anyway, now let’s fit a tree to the full model with all predictors.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
-<a class="sourceLine" id="cb65-2" title="2">fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>) </a>
-<a class="sourceLine" id="cb65-3" title="3">fit1 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season  <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train, <span class="dt">method=</span><span class="st">&quot;rpart&quot;</span>,  <span class="dt">trControl =</span> fitControl, <span class="dt">na.action =</span> na.pass, <span class="dt">tuneLength =</span> <span class="dv">10</span>) </a>
-<a class="sourceLine" id="cb65-4" title="4"><span class="kw">print</span>(fit1<span class="op">$</span>results)</a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
+<a class="sourceLine" id="cb62-2" title="2">fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>) </a>
+<a class="sourceLine" id="cb62-3" title="3">fit1 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season  <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train, <span class="dt">method=</span><span class="st">&quot;rpart&quot;</span>,  <span class="dt">trControl =</span> fitControl, <span class="dt">na.action =</span> na.pass, <span class="dt">tuneLength =</span> <span class="dv">10</span>) </a>
+<a class="sourceLine" id="cb62-4" title="4"><span class="kw">print</span>(fit1<span class="op">$</span>results)</a></code></pre></div>
 <pre><code>##            cp  Accuracy     Kappa AccuracySD    KappaSD
-## 1  0.00000000 0.9713048 0.9578432 0.01091762 0.01612790
-## 2  0.02197462 0.9742922 0.9622913 0.01397636 0.02061520
-## 3  0.04394924 0.9016309 0.8564382 0.02705227 0.03915671
-## 4  0.06592386 0.8998353 0.8538517 0.02647849 0.03836698
-## 5  0.08789848 0.8998353 0.8538517 0.02647849 0.03836698
-## 6  0.10987310 0.8998353 0.8538517 0.02647849 0.03836698
-## 7  0.13184773 0.8998353 0.8538517 0.02647849 0.03836698
-## 8  0.15382235 0.8998353 0.8538517 0.02647849 0.03836698
-## 9  0.17579697 0.8998353 0.8538517 0.02647849 0.03836698
-## 10 0.19777159 0.6212742 0.3255780 0.18559976 0.37855174</code></pre>
+## 1  0.00000000 0.9727547 0.9599462 0.01199119 0.01776702
+## 2  0.02197462 0.9757421 0.9644078 0.01352508 0.01998531
+## 3  0.04394924 0.9036034 0.8591721 0.02419856 0.03538491
+## 4  0.06592386 0.9027034 0.8578440 0.02378309 0.03478664
+## 5  0.08789848 0.9027034 0.8578440 0.02378309 0.03478664
+## 6  0.10987310 0.9027034 0.8578440 0.02378309 0.03478664
+## 7  0.13184773 0.9027034 0.8578440 0.02378309 0.03478664
+## 8  0.15382235 0.9027034 0.8578440 0.02378309 0.03478664
+## 9  0.17579697 0.9027034 0.8578440 0.02378309 0.03478664
+## 10 0.19777159 0.6217022 0.3266941 0.18731989 0.38037382</code></pre>
 <p>This printout shows us model performance for different values of the tuning parameter, cp. It seems for a high cp, we get a close to perfect model. Let’s take a look at this model. We could use the regular <code>plot</code> function, but the resulting tree looks ugly. The <code>prp</code> function from the <code>rpart.plot</code> package makes a much nicer tree (other packages to plot nice trees exist).</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="kw">prp</span>(fit1<span class="op">$</span>finalModel, <span class="dt">extra =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="kw">prp</span>(fit1<span class="op">$</span>finalModel, <span class="dt">extra =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p><img src="Tree_Fitting_files/figure-html/printfigure-1.png" width="672" /></p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1">ww=<span class="fl">17.8</span><span class="op">/</span><span class="fl">2.54</span>; wh=ww; <span class="co">#for saving plot</span></a>
-<a class="sourceLine" id="cb68-2" title="2"><span class="kw">dev.print</span>(<span class="dt">device=</span>png,<span class="dt">width=</span>ww,<span class="dt">height=</span>wh,<span class="dt">units=</span><span class="st">&quot;in&quot;</span>,<span class="dt">res=</span><span class="dv">600</span>,<span class="dt">file=</span><span class="st">&quot;rparttree.png&quot;</span>) <span class="co">#save tree to file</span></a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1">ww=<span class="fl">17.8</span><span class="op">/</span><span class="fl">2.54</span>; wh=ww; <span class="co">#for saving plot</span></a>
+<a class="sourceLine" id="cb65-2" title="2"><span class="kw">dev.print</span>(<span class="dt">device=</span>png,<span class="dt">width=</span>ww,<span class="dt">height=</span>wh,<span class="dt">units=</span><span class="st">&quot;in&quot;</span>,<span class="dt">res=</span><span class="dv">600</span>,<span class="dt">file=</span><span class="st">&quot;rparttree.png&quot;</span>) <span class="co">#save tree to file</span></a></code></pre></div>
 <pre><code>## png 
 ##   2</code></pre>
 <p>So the model splits on month, repeatedly. And it also splits on the hemisphere, which makes sense since the seasons are switched in the Southern hemisphere. This is also likely the reason why the model with month only didn’t produce a perfect fit. It could get one hemisphere right, but not both. With both bits of information, we can get almost perfect predictions.</p>
@@ -4537,58 +4545,58 @@ div.tocify {
 <h1>Re-fitting the tree</h1>
 <p>So the above produces an almost perfect fit, and thus more powerful models are not really needed. However, using start (and end) month information seems a bit like cheating. Of course, if we give the model that kind of information, it will do well. Let’s make it harder and remove those 2 variables from both the training and test sets.</p>
 <p>Also, further below, I had problems fitting some of the models, the NA caused problems. The issue often is that while the underlying algorithm can handle the missing values (as you saw above), when using wrappers like <code>caret</code>, things break down. I could either skip <code>caret</code> and try to access the different models directly. For now, I decided to go the other route and drop the data with the missing values. To be able to compare the different models below, I’m dropping those NA observations here. Since the data changed, we also need to re-do the null model computation to be able to compare properly.</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="co">#write code that removes StartMonth and EndMonth from both training and test sets</span></a>
-<a class="sourceLine" id="cb70-2" title="2"><span class="co"># then drop all observations with missing values in both train and test sets</span></a>
-<a class="sourceLine" id="cb70-3" title="3"><span class="co"># copy and paste the code from above that computes performance of a null model</span></a>
-<a class="sourceLine" id="cb70-4" title="4"></a>
-<a class="sourceLine" id="cb70-5" title="5">data_train_mod &lt;-<span class="st"> </span>data_train <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb70-6" title="6"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(StartMonth, EndMonth)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb70-7" title="7"><span class="st">  </span><span class="kw">na.omit</span>(data_train)</a>
-<a class="sourceLine" id="cb70-8" title="8"></a>
-<a class="sourceLine" id="cb70-9" title="9">data_test_mod &lt;-<span class="st"> </span>data_test <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb70-10" title="10"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(StartMonth, EndMonth)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb70-11" title="11"><span class="st">  </span><span class="kw">na.omit</span>(data_test)</a>
-<a class="sourceLine" id="cb70-12" title="12"></a>
-<a class="sourceLine" id="cb70-13" title="13"></a>
-<a class="sourceLine" id="cb70-14" title="14">frequencies &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">summary</span>(data_train_mod<span class="op">$</span>season))</a>
-<a class="sourceLine" id="cb70-15" title="15"></a>
-<a class="sourceLine" id="cb70-16" title="16">null_model &lt;-<span class="st"> </span><span class="kw">max</span>(frequencies)<span class="op">/</span><span class="kw">length</span>(data_train_mod<span class="op">$</span>season)</a>
-<a class="sourceLine" id="cb70-17" title="17">null_model</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="co">#write code that removes StartMonth and EndMonth from both training and test sets</span></a>
+<a class="sourceLine" id="cb67-2" title="2"><span class="co"># then drop all observations with missing values in both train and test sets</span></a>
+<a class="sourceLine" id="cb67-3" title="3"><span class="co"># copy and paste the code from above that computes performance of a null model</span></a>
+<a class="sourceLine" id="cb67-4" title="4"></a>
+<a class="sourceLine" id="cb67-5" title="5">data_train_mod &lt;-<span class="st"> </span>data_train <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb67-6" title="6"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(StartMonth, EndMonth)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb67-7" title="7"><span class="st">  </span><span class="kw">na.omit</span>(data_train)</a>
+<a class="sourceLine" id="cb67-8" title="8"></a>
+<a class="sourceLine" id="cb67-9" title="9">data_test_mod &lt;-<span class="st"> </span>data_test <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb67-10" title="10"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(StartMonth, EndMonth)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb67-11" title="11"><span class="st">  </span><span class="kw">na.omit</span>(data_test)</a>
+<a class="sourceLine" id="cb67-12" title="12"></a>
+<a class="sourceLine" id="cb67-13" title="13"></a>
+<a class="sourceLine" id="cb67-14" title="14">frequencies &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">summary</span>(data_train_mod<span class="op">$</span>season))</a>
+<a class="sourceLine" id="cb67-15" title="15"></a>
+<a class="sourceLine" id="cb67-16" title="16">null_model &lt;-<span class="st"> </span><span class="kw">max</span>(frequencies)<span class="op">/</span><span class="kw">length</span>(data_train_mod<span class="op">$</span>season)</a>
+<a class="sourceLine" id="cb67-17" title="17">null_model</a></code></pre></div>
 <pre><code>## [1] 0.4625</code></pre>
 <p>You should find a very similar null-model accuracy, around 0.46.</p>
 <p>Now, let’s re-do the fit above fitting a single tree. I’ll increase the tuneLength value a bit so the algorithm can try a few more parameter values.</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co">#copy and paste the code from above that fits the single tree. set tuneLength to 20. </span></a>
-<a class="sourceLine" id="cb72-2" title="2"><span class="co"># look at model performance for different cp values. Also plot the tree.</span></a>
-<a class="sourceLine" id="cb72-3" title="3"></a>
-<a class="sourceLine" id="cb72-4" title="4"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
-<a class="sourceLine" id="cb72-5" title="5">fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>) </a>
-<a class="sourceLine" id="cb72-6" title="6">fit1 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season  <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train_mod, <span class="dt">method=</span><span class="st">&quot;rpart&quot;</span>,  <span class="dt">trControl =</span> fitControl, <span class="dt">na.action =</span> na.pass, <span class="dt">tuneLength =</span> <span class="dv">20</span>) </a>
-<a class="sourceLine" id="cb72-7" title="7"><span class="kw">print</span>(fit1<span class="op">$</span>results)</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="co">#copy and paste the code from above that fits the single tree. set tuneLength to 20. </span></a>
+<a class="sourceLine" id="cb69-2" title="2"><span class="co"># look at model performance for different cp values. Also plot the tree.</span></a>
+<a class="sourceLine" id="cb69-3" title="3"></a>
+<a class="sourceLine" id="cb69-4" title="4"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
+<a class="sourceLine" id="cb69-5" title="5">fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>) </a>
+<a class="sourceLine" id="cb69-6" title="6">fit1 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season  <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train_mod, <span class="dt">method=</span><span class="st">&quot;rpart&quot;</span>,  <span class="dt">trControl =</span> fitControl, <span class="dt">na.action =</span> na.pass, <span class="dt">tuneLength =</span> <span class="dv">20</span>) </a>
+<a class="sourceLine" id="cb69-7" title="7"><span class="kw">print</span>(fit1<span class="op">$</span>results)</a></code></pre></div>
 <pre><code>##              cp  Accuracy      Kappa AccuracySD    KappaSD
-## 1  0.0000000000 0.4385918 0.14760914 0.03546266 0.04240149
-## 2  0.0006744436 0.4385918 0.14760914 0.03546266 0.04240149
-## 3  0.0013488872 0.4385918 0.14760914 0.03546266 0.04240149
-## 4  0.0020233308 0.4385918 0.14760914 0.03546266 0.04240149
-## 5  0.0026977743 0.4418030 0.15027630 0.03523796 0.04289956
-## 6  0.0033722179 0.4421633 0.14963661 0.03620312 0.04284254
-## 7  0.0040466615 0.4421633 0.14963661 0.03620312 0.04284254
-## 8  0.0047211051 0.4450493 0.14633292 0.03547249 0.04171609
-## 9  0.0053955487 0.4450493 0.14633292 0.03547249 0.04171609
-## 10 0.0060699923 0.4457636 0.14596481 0.03473719 0.04226756
-## 11 0.0067444358 0.4489715 0.14611200 0.03471484 0.04095743
-## 12 0.0074188794 0.4529065 0.14867211 0.02999080 0.03754142
-## 13 0.0080933230 0.4536273 0.14933357 0.02969330 0.03746276
-## 14 0.0087677666 0.4497050 0.13274266 0.03042503 0.04177930
-## 15 0.0094422102 0.4515068 0.12942559 0.03177488 0.04674532
-## 16 0.0101166538 0.4515006 0.12252878 0.02919128 0.04920629
-## 17 0.0107910973 0.4486306 0.11463569 0.02496361 0.05408625
-## 18 0.0114655409 0.4496988 0.11156645 0.02788791 0.05164591
-## 19 0.0121399845 0.4504099 0.10037600 0.02688236 0.05472852
-## 20 0.0128144281 0.4507764 0.08900285 0.02412738 0.04785815</code></pre>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="kw">prp</span>(fit1<span class="op">$</span>finalModel, <span class="dt">extra =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="dv">1</span>)</a></code></pre></div>
+## 1  0.0000000000 0.4378425 0.13457605 0.02694065 0.04341300
+## 2  0.0006702804 0.4378425 0.13457605 0.02694065 0.04341300
+## 3  0.0013405607 0.4378425 0.13457605 0.02694065 0.04341300
+## 4  0.0020108411 0.4378425 0.13457605 0.02694065 0.04341300
+## 5  0.0026811214 0.4389172 0.13517857 0.02526516 0.04031140
+## 6  0.0033514018 0.4385568 0.13307434 0.02488753 0.04167069
+## 7  0.0040216821 0.4385568 0.13307434 0.02488753 0.04167069
+## 8  0.0046919625 0.4435922 0.13230656 0.02833612 0.04582547
+## 9  0.0053622428 0.4450081 0.13338342 0.02915082 0.04758134
+## 10 0.0060325232 0.4450081 0.13338342 0.02915082 0.04758134
+## 11 0.0067028035 0.4535732 0.13897975 0.03452124 0.05306157
+## 12 0.0073730839 0.4567939 0.14084232 0.02961151 0.04938619
+## 13 0.0080433642 0.4575146 0.14154844 0.03034607 0.05008102
+## 14 0.0087136446 0.4500303 0.12439189 0.02746626 0.04680916
+## 15 0.0093839249 0.4507383 0.12184695 0.02725315 0.04869600
+## 16 0.0100542053 0.4529069 0.11997415 0.02546668 0.04578912
+## 17 0.0107244856 0.4468129 0.09325425 0.02145818 0.04123082
+## 18 0.0113947660 0.4457286 0.09038449 0.02092975 0.04077208
+## 19 0.0120650463 0.4432413 0.07719425 0.02181069 0.04427915
+## 20 0.0127353267 0.4464492 0.07224340 0.02043789 0.04278399</code></pre>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="kw">prp</span>(fit1<span class="op">$</span>finalModel, <span class="dt">extra =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p><img src="Tree_Fitting_files/figure-html/fullfit-2-1.png" width="672" /></p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1">ww=<span class="fl">17.8</span><span class="op">/</span><span class="fl">2.54</span>; wh=ww; <span class="co">#for saving plot</span></a>
-<a class="sourceLine" id="cb75-2" title="2"><span class="kw">dev.print</span>(<span class="dt">device=</span>png,<span class="dt">width=</span>ww,<span class="dt">height=</span>wh,<span class="dt">units=</span><span class="st">&quot;in&quot;</span>,<span class="dt">res=</span><span class="dv">600</span>,<span class="dt">file=</span><span class="st">&quot;rparttree_datatrain_mod.png&quot;</span>) <span class="co">#save tree to file</span></a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1">ww=<span class="fl">17.8</span><span class="op">/</span><span class="fl">2.54</span>; wh=ww; <span class="co">#for saving plot</span></a>
+<a class="sourceLine" id="cb72-2" title="2"><span class="kw">dev.print</span>(<span class="dt">device=</span>png,<span class="dt">width=</span>ww,<span class="dt">height=</span>wh,<span class="dt">units=</span><span class="st">&quot;in&quot;</span>,<span class="dt">res=</span><span class="dv">600</span>,<span class="dt">file=</span><span class="st">&quot;rparttree_datatrain_mod.png&quot;</span>) <span class="co">#save tree to file</span></a></code></pre></div>
 <pre><code>## png 
 ##   2</code></pre>
 <p>With those variables removed, the tree model doesn’t perform very well. Accuracy is similar to the null model. You can see that in the tree figure, the final nodes (leaves) show a lot of mis-predictions. Note again that only a few variables are used to build the tree, and OBYear shows up more than once.</p>
@@ -4598,37 +4606,21 @@ div.tocify {
 <h1>Random forest</h1>
 <p>Let’s try a random forest. We’ll use the <code>ranger</code> algorithm for this (it’s generally faster than the <code>rf</code> algorithm). This model has parameters that can and should be tuned. To do the tuning, we set up a grid of parameters and search over that grid. More efficient ways exist, e.g., doing an optimization using something like a genetic algorithm. The <code>mlr</code> package allows you to do that, <code>caret</code> doesn’t have those features out of the box, you would need to write your own code for that.</p>
 <p>Note that running the code below (and several models that follow) might take a few seconds or minutes, depending on the speed of your computer.</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
-<a class="sourceLine" id="cb77-2" title="2">tuning_grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>( <span class="dt">.mtry =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">7</span>,<span class="dt">by=</span><span class="dv">1</span>), <span class="dt">.splitrule =</span> <span class="st">&quot;gini&quot;</span>, <span class="dt">.min.node.size =</span> <span class="kw">seq</span>(<span class="dv">2</span>,<span class="dv">8</span>,<span class="dt">by=</span><span class="dv">1</span>) )</a>
-<a class="sourceLine" id="cb77-3" title="3">fit2 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train_mod, <span class="dt">method=</span><span class="st">&quot;ranger&quot;</span>,  <span class="dt">trControl =</span> fitControl, <span class="dt">tuneGrid =</span> tuning_grid, <span class="dt">na.action =</span> na.pass) </a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
+<a class="sourceLine" id="cb74-2" title="2">tuning_grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>( <span class="dt">.mtry =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">7</span>,<span class="dt">by=</span><span class="dv">1</span>), <span class="dt">.splitrule =</span> <span class="st">&quot;gini&quot;</span>, <span class="dt">.min.node.size =</span> <span class="kw">seq</span>(<span class="dv">2</span>,<span class="dv">8</span>,<span class="dt">by=</span><span class="dv">1</span>) )</a>
+<a class="sourceLine" id="cb74-3" title="3">fit2 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train_mod, <span class="dt">method=</span><span class="st">&quot;ranger&quot;</span>,  <span class="dt">trControl =</span> fitControl, <span class="dt">tuneGrid =</span> tuning_grid, <span class="dt">na.action =</span> na.pass) </a></code></pre></div>
 <p>We can’t plot a nice final tree anymore since the model is now a combination of trees. We can look at a plot of model performance as a function of the model tuning parameters.</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1"><span class="kw">plot</span>(fit2)</a></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1"><span class="kw">plot</span>(fit2)</a></code></pre></div>
 <p><img src="Tree_Fitting_files/figure-html/randomforestresult-1.png" width="672" /></p>
 <p>This plot suggests that for around 4 randomly selected parameters and a minimum node size of 6, we get the best model. Note that there isn’t much difference in model performance for several different values of the tuning parameters, and the overall model isn’t that great either, an accuracy just shy of 0.5.</p>
 </div>
 <div id="boosted-tree-ensemble" class="section level1">
 <h1>Boosted tree ensemble</h1>
 <p>Let’s now try a boosted regression tree ensemble. This method also has several parameters that need tuning, which are specified in <code>gbmGrid</code>.</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1">gbmGrid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">interaction.depth =</span> <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">7</span>, <span class="dt">by =</span> <span class="dv">2</span>), <span class="dt">n.trees =</span> <span class="dv">300</span>, <span class="dt">shrinkage =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.01</span>), <span class="dt">n.minobsinnode =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>))</a>
-<a class="sourceLine" id="cb79-2" title="2">fit3 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train_mod, <span class="dt">method=</span><span class="st">&quot;gbm&quot;</span>, <span class="dt">trControl =</span> fitControl, <span class="dt">verbose=</span><span class="ot">FALSE</span>, <span class="dt">tuneGrid =</span> gbmGrid) </a></code></pre></div>
-<pre><code>## Warning in (function (x, y, offset = NULL, misc = NULL, distribution =
-## &quot;bernoulli&quot;, : variable 18: State1 has no variation.</code></pre>
-<pre><code>## Warning in (function (x, y, offset = NULL, misc = NULL, distribution =
-## &quot;bernoulli&quot;, : variable 23: StateCO has no variation.</code></pre>
-<pre><code>## Warning in (function (x, y, offset = NULL, misc = NULL, distribution =
-## &quot;bernoulli&quot;, : variable 28: StateKY has no variation.</code></pre>
-<pre><code>## Warning in (function (x, y, offset = NULL, misc = NULL, distribution =
-## &quot;bernoulli&quot;, : variable 30: StateLA, MD, MS, NC has no variation.</code></pre>
-<pre><code>## Warning in (function (x, y, offset = NULL, misc = NULL, distribution =
-## &quot;bernoulli&quot;, : variable 34: StateMD, TX, NC, PA, MS has no variation.</code></pre>
-<pre><code>## Warning in (function (x, y, offset = NULL, misc = NULL, distribution =
-## &quot;bernoulli&quot;, : variable 40: StateOR has no variation.</code></pre>
-<pre><code>## Warning in (function (x, y, offset = NULL, misc = NULL, distribution =
-## &quot;bernoulli&quot;, : variable 46: StateVT has no variation.</code></pre>
-<pre><code>## Warning in (function (x, y, offset = NULL, misc = NULL, distribution =
-## &quot;bernoulli&quot;, : variable 47: StateWA has no variation.</code></pre>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1">gbmGrid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">interaction.depth =</span> <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">7</span>, <span class="dt">by =</span> <span class="dv">2</span>), <span class="dt">n.trees =</span> <span class="dv">300</span>, <span class="dt">shrinkage =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.01</span>), <span class="dt">n.minobsinnode =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>))</a>
+<a class="sourceLine" id="cb76-2" title="2">fit3 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train_mod, <span class="dt">method=</span><span class="st">&quot;gbm&quot;</span>, <span class="dt">trControl =</span> fitControl, <span class="dt">verbose=</span><span class="ot">FALSE</span>, <span class="dt">tuneGrid =</span> gbmGrid) </a></code></pre></div>
 <p>We can again look at diagnostic fits and variable importance plots for this model, as well as check performance.</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="kw">plot</span>(fit3)</a></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="kw">plot</span>(fit3)</a></code></pre></div>
 <p><img src="Tree_Fitting_files/figure-html/gbmresult-1.png" width="672" /></p>
 <p>It doesn’t look like the boosted tree model performs any better. It may be that no information in the predictors strongly correlates with the season.</p>
 <p>But let’s not give up yet, we’ll try a bit more. Let’s see if pre-processing helps.</p>
@@ -4636,42 +4628,35 @@ div.tocify {
 <div id="random-forest-with-pre-processed-predictors" class="section level1">
 <h1>Random forest with pre-processed predictors</h1>
 <p>Here, we’ll fit another random forest model but now use centering and scaling for the predictors.</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1"><span class="co"># copy the random forest code from above. Add a statement to the train() function that centers and scales predictors.</span></a>
-<a class="sourceLine" id="cb89-2" title="2"><span class="co"># save the result as fit4. plot model results.</span></a>
-<a class="sourceLine" id="cb89-3" title="3"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
-<a class="sourceLine" id="cb89-4" title="4">tuning_grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>( <span class="dt">.mtry =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">7</span>,<span class="dt">by=</span><span class="dv">1</span>), <span class="dt">.splitrule =</span> <span class="st">&quot;gini&quot;</span>, <span class="dt">.min.node.size =</span> <span class="kw">seq</span>(<span class="dv">2</span>,<span class="dv">8</span>,<span class="dt">by=</span><span class="dv">1</span>) )</a>
-<a class="sourceLine" id="cb89-5" title="5">fit4 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train_mod, <span class="dt">method=</span><span class="st">&quot;ranger&quot;</span>,  <span class="dt">trControl =</span> fitControl, <span class="dt">tuneGrid =</span> tuning_grid, <span class="dt">na.action =</span> na.pass, <span class="dt">preProcess=</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>,<span class="st">&quot;scale&quot;</span>)) </a></code></pre></div>
-<pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut = 19, uniqueCut
-## = 10, : These variables have zero variances: State1, StateCO, StateKY,
-## StateLA, MD, MS, NC, StateMD, TX, NC, PA, MS, StateOR, StateVT, StateWA</code></pre>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1"><span class="kw">plot</span>(fit4)</a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1"><span class="co"># copy the random forest code from above. Add a statement to the train() function that centers and scales predictors.</span></a>
+<a class="sourceLine" id="cb78-2" title="2"><span class="co"># save the result as fit4. plot model results.</span></a>
+<a class="sourceLine" id="cb78-3" title="3"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
+<a class="sourceLine" id="cb78-4" title="4">tuning_grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>( <span class="dt">.mtry =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">7</span>,<span class="dt">by=</span><span class="dv">1</span>), <span class="dt">.splitrule =</span> <span class="st">&quot;gini&quot;</span>, <span class="dt">.min.node.size =</span> <span class="kw">seq</span>(<span class="dv">2</span>,<span class="dv">8</span>,<span class="dt">by=</span><span class="dv">1</span>) )</a>
+<a class="sourceLine" id="cb78-5" title="5">fit4 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train_mod, <span class="dt">method=</span><span class="st">&quot;ranger&quot;</span>,  <span class="dt">trControl =</span> fitControl, <span class="dt">tuneGrid =</span> tuning_grid, <span class="dt">na.action =</span> na.pass, <span class="dt">preProcess=</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>,<span class="st">&quot;scale&quot;</span>)) </a>
+<a class="sourceLine" id="cb78-6" title="6"><span class="kw">plot</span>(fit4)</a></code></pre></div>
 <p><img src="Tree_Fitting_files/figure-html/randomforest-2-1.png" width="672" /></p>
 <p>It doesn’t look like it helped a lot.</p>
 </div>
 <div id="discriminant-analysis" class="section level1">
 <h1>Discriminant analysis</h1>
 <p>Ok, let’s try one more. Since the trees don’t seem to work too well, and a logistic model doesn’t work for multiple categorical outcomes, let’s use another model that can do that, namely a discriminant analysis. We’ve already seen one of those previously. Let’s pick a different one. The caret package website lists a lot of algorithms. I don’t know how exactly they all differ. Let’s try the one called penalized discriminant analysis (pda) (penalized is another way of saying regularized, and we learned that regularization might sometimes help.)</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1"><span class="co">#write code that trains a pda model, use tuneLength 20. Save as fit5 and plot.</span></a>
-<a class="sourceLine" id="cb92-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
-<a class="sourceLine" id="cb92-3" title="3">tuning_grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>( <span class="dt">.mtry =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">7</span>,<span class="dt">by=</span><span class="dv">1</span>), <span class="dt">.splitrule =</span> <span class="st">&quot;gini&quot;</span>, <span class="dt">.min.node.size =</span> <span class="kw">seq</span>(<span class="dv">2</span>,<span class="dv">8</span>,<span class="dt">by=</span><span class="dv">1</span>) )</a>
-<a class="sourceLine" id="cb92-4" title="4">fit5 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train_mod, <span class="dt">method=</span><span class="st">&quot;pda&quot;</span>,  <span class="dt">trControl =</span> fitControl, <span class="dt">na.action =</span> na.pass, <span class="dt">tuneLength=</span><span class="dv">20</span>) </a></code></pre></div>
-<pre><code>## Warning in nominalTrainWorkflow(x = x, y = y, wts = weights, info =
-## trainInfo, : There were missing values in resampled performance measures.</code></pre>
-<pre><code>## Warning in train.default(x, y, weights = w, ...): missing values found in
-## aggregated results</code></pre>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1"><span class="kw">plot</span>(fit5)</a></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1"><span class="co">#write code that trains a pda model, use tuneLength 20. Save as fit5 and plot.</span></a>
+<a class="sourceLine" id="cb79-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#makes each code block reproducible</span></a>
+<a class="sourceLine" id="cb79-3" title="3">tuning_grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>( <span class="dt">.mtry =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">7</span>,<span class="dt">by=</span><span class="dv">1</span>), <span class="dt">.splitrule =</span> <span class="st">&quot;gini&quot;</span>, <span class="dt">.min.node.size =</span> <span class="kw">seq</span>(<span class="dv">2</span>,<span class="dv">8</span>,<span class="dt">by=</span><span class="dv">1</span>) )</a>
+<a class="sourceLine" id="cb79-4" title="4">fit5 =<span class="st"> </span>caret<span class="op">::</span><span class="kw">train</span>(season <span class="op">~</span><span class="st"> </span>., <span class="dt">data=</span>data_train_mod, <span class="dt">method=</span><span class="st">&quot;pda&quot;</span>,  <span class="dt">trControl =</span> fitControl, <span class="dt">na.action =</span> na.pass, <span class="dt">tuneLength=</span><span class="dv">20</span>) </a>
+<a class="sourceLine" id="cb79-5" title="5"><span class="kw">plot</span>(fit5)</a></code></pre></div>
 <p><img src="Tree_Fitting_files/figure-html/da-1.png" width="672" /></p>
 <p>Ok, that doesn’t look very good either. Alright, enough models, there just doesn’t seem to be much information in the data that could help predict season. So let’s start to wrap up.</p>
 </div>
 <div id="comparing-model-performance" class="section level1">
 <h1>Comparing model performance</h1>
 <p>To recap: After we removed the obvious predictors, we fitted 1 tree, 1 random forest, 1 gradient boosted tree, 1 random forest with processed predictors, and 1 discriminant analysis. Let’s compare the performance.</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1">resamps &lt;-<span class="st"> </span><span class="kw">resamples</span>(<span class="kw">list</span>(<span class="dt">tree =</span> fit1,</a>
-<a class="sourceLine" id="cb96-2" title="2">                          <span class="dt">RF1 =</span> fit2,</a>
-<a class="sourceLine" id="cb96-3" title="3">                          <span class="dt">GBM =</span> fit3,</a>
-<a class="sourceLine" id="cb96-4" title="4">                          <span class="dt">RF2 =</span> fit4, </a>
-<a class="sourceLine" id="cb96-5" title="5">                          <span class="dt">PDA =</span> fit5))</a>
-<a class="sourceLine" id="cb96-6" title="6"><span class="kw">bwplot</span>(resamps)</a></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1">resamps &lt;-<span class="st"> </span><span class="kw">resamples</span>(<span class="kw">list</span>(<span class="dt">tree =</span> fit1,</a>
+<a class="sourceLine" id="cb80-2" title="2">                          <span class="dt">RF1 =</span> fit2,</a>
+<a class="sourceLine" id="cb80-3" title="3">                          <span class="dt">GBM =</span> fit3,</a>
+<a class="sourceLine" id="cb80-4" title="4">                          <span class="dt">RF2 =</span> fit4, </a>
+<a class="sourceLine" id="cb80-5" title="5">                          <span class="dt">PDA =</span> fit5))</a>
+<a class="sourceLine" id="cb80-6" title="6"><span class="kw">bwplot</span>(resamps)</a></code></pre></div>
 <p><img src="Tree_Fitting_files/figure-html/randomforest-3-1.png" width="672" /></p>
 <p>This plot suggests that while none of the models are great, the random forest ones seem overall slightly better.</p>
 </div>
@@ -4680,106 +4665,106 @@ div.tocify {
 <p>Even though we didn’t really have any good model, and thus further evaluating it seems, in some sense pointless, for this exercise we’ll look at our “best” model anyway. We’ll declare the 1st random forest model (saved as <code>fit2</code>) to be the best.</p>
 <p>Model uncertainty in the predictions is shown in the previous plot.</p>
 <p>For categorical outcomes, we can’t plot residuals. But we can look at the final “2x2” (in this case, a 4x4) table (the confusion matrix) and compare true versus predicted outcomes and see if it shows any pattern.</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" title="1"><span class="co">#Write code to get model predictions for the outcome on the training data.</span></a>
-<a class="sourceLine" id="cb97-2" title="2"><span class="co">#use predicted and actual outcomes, make a table and compute accuracy.</span></a>
-<a class="sourceLine" id="cb97-3" title="3"></a>
-<a class="sourceLine" id="cb97-4" title="4"><span class="co">#fit2 is the RF1 model</span></a>
-<a class="sourceLine" id="cb97-5" title="5">predictions &lt;-<span class="st"> </span><span class="kw">predict</span>(fit2, <span class="dt">newdata=</span> data_train_mod, <span class="dt">interval=</span><span class="st">&quot;confidence&quot;</span>)</a>
-<a class="sourceLine" id="cb97-6" title="6"></a>
-<a class="sourceLine" id="cb97-7" title="7">add_predictions &lt;-<span class="st"> </span>data_train_mod <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb97-8" title="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictions=</span> predictions)</a>
-<a class="sourceLine" id="cb97-9" title="9"><span class="co">#add_predictions</span></a>
-<a class="sourceLine" id="cb97-10" title="10"></a>
-<a class="sourceLine" id="cb97-11" title="11"></a>
-<a class="sourceLine" id="cb97-12" title="12"><span class="co">#I went ahead and created a manual calculation of accuracy before calling confusion matrix to see if I got the same thing.  And yay, I do!</span></a>
-<a class="sourceLine" id="cb97-13" title="13">accuracy &lt;-<span class="st"> </span>(<span class="kw">nrow</span>(add_predictions))</a>
-<a class="sourceLine" id="cb97-14" title="14"></a>
-<a class="sourceLine" id="cb97-15" title="15"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(add_predictions)){ </a>
-<a class="sourceLine" id="cb97-16" title="16">  <span class="cf">if</span> (add_predictions<span class="op">$</span>season[i] <span class="op">==</span><span class="st"> </span>add_predictions<span class="op">$</span>predictions[i])</a>
-<a class="sourceLine" id="cb97-17" title="17">    accuracy[i] =<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb97-18" title="18">  <span class="cf">else</span></a>
-<a class="sourceLine" id="cb97-19" title="19">    accuracy[i] =<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb97-20" title="20">}</a>
-<a class="sourceLine" id="cb97-21" title="21"></a>
-<a class="sourceLine" id="cb97-22" title="22">accuracy_table &lt;-<span class="st"> </span>data_train_mod <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb97-23" title="23"><span class="st">  </span><span class="kw">transmute</span>(season, predictions, accuracy)</a>
-<a class="sourceLine" id="cb97-24" title="24"></a>
-<a class="sourceLine" id="cb97-25" title="25"><span class="co">#accuracy_table</span></a>
-<a class="sourceLine" id="cb97-26" title="26"></a>
-<a class="sourceLine" id="cb97-27" title="27">total_accuracy &lt;-<span class="st"> </span><span class="kw">sum</span>(accuracy_table<span class="op">$</span>accuracy<span class="op">/</span><span class="kw">nrow</span>(accuracy_table))</a>
-<a class="sourceLine" id="cb97-28" title="28"></a>
-<a class="sourceLine" id="cb97-29" title="29">total_accuracy</a></code></pre></div>
-<pre><code>## [1] 0.6892857</code></pre>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1"><span class="kw">confusionMatrix</span>(accuracy_table<span class="op">$</span>predictions, accuracy_table<span class="op">$</span>season)</a></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1"><span class="co">#Write code to get model predictions for the outcome on the training data.</span></a>
+<a class="sourceLine" id="cb81-2" title="2"><span class="co">#use predicted and actual outcomes, make a table and compute accuracy.</span></a>
+<a class="sourceLine" id="cb81-3" title="3"></a>
+<a class="sourceLine" id="cb81-4" title="4"><span class="co">#fit2 is the RF1 model</span></a>
+<a class="sourceLine" id="cb81-5" title="5">predictions &lt;-<span class="st"> </span><span class="kw">predict</span>(fit2, <span class="dt">newdata=</span> data_train_mod, <span class="dt">interval=</span><span class="st">&quot;confidence&quot;</span>)</a>
+<a class="sourceLine" id="cb81-6" title="6"></a>
+<a class="sourceLine" id="cb81-7" title="7">add_predictions &lt;-<span class="st"> </span>data_train_mod <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb81-8" title="8"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictions=</span> predictions)</a>
+<a class="sourceLine" id="cb81-9" title="9"><span class="co">#add_predictions</span></a>
+<a class="sourceLine" id="cb81-10" title="10"></a>
+<a class="sourceLine" id="cb81-11" title="11"></a>
+<a class="sourceLine" id="cb81-12" title="12"><span class="co">#I went ahead and created a manual calculation of accuracy before calling confusion matrix to see if I got the same thing.  And yay, I do!</span></a>
+<a class="sourceLine" id="cb81-13" title="13">accuracy &lt;-<span class="st"> </span>(<span class="kw">nrow</span>(add_predictions))</a>
+<a class="sourceLine" id="cb81-14" title="14"></a>
+<a class="sourceLine" id="cb81-15" title="15"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(add_predictions)){ </a>
+<a class="sourceLine" id="cb81-16" title="16">  <span class="cf">if</span> (add_predictions<span class="op">$</span>season[i] <span class="op">==</span><span class="st"> </span>add_predictions<span class="op">$</span>predictions[i])</a>
+<a class="sourceLine" id="cb81-17" title="17">    accuracy[i] =<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb81-18" title="18">  <span class="cf">else</span></a>
+<a class="sourceLine" id="cb81-19" title="19">    accuracy[i] =<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb81-20" title="20">}</a>
+<a class="sourceLine" id="cb81-21" title="21"></a>
+<a class="sourceLine" id="cb81-22" title="22">accuracy_table &lt;-<span class="st"> </span>data_train_mod <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb81-23" title="23"><span class="st">  </span><span class="kw">transmute</span>(season, predictions, accuracy)</a>
+<a class="sourceLine" id="cb81-24" title="24"></a>
+<a class="sourceLine" id="cb81-25" title="25"><span class="co">#accuracy_table</span></a>
+<a class="sourceLine" id="cb81-26" title="26"></a>
+<a class="sourceLine" id="cb81-27" title="27">total_accuracy &lt;-<span class="st"> </span><span class="kw">sum</span>(accuracy_table<span class="op">$</span>accuracy<span class="op">/</span><span class="kw">nrow</span>(accuracy_table))</a>
+<a class="sourceLine" id="cb81-28" title="28"></a>
+<a class="sourceLine" id="cb81-29" title="29">total_accuracy</a></code></pre></div>
+<pre><code>## [1] 0.7839286</code></pre>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1"><span class="kw">confusionMatrix</span>(accuracy_table<span class="op">$</span>predictions, accuracy_table<span class="op">$</span>season)</a></code></pre></div>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
 ## Prediction Fall Spring Summer Winter
-##     Fall     49      2      0      1
-##     Spring    1     44      0      0
-##     Summer    0      2     35      0
-##     Winter   45     86     37    258
+##     Fall     62      4      1      1
+##     Spring    1     67      1      1
+##     Summer    1      2     53      0
+##     Winter   31     61     17    257
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.6893          
-##                  95% CI : (0.6491, 0.7274)
+##                Accuracy : 0.7839          
+##                  95% CI : (0.7475, 0.8173)
 ##     No Information Rate : 0.4625          
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.4862          
+##                   Kappa : 0.6594          
 ##                                           
-##  Mcnemar&#39;s Test P-Value : NA              
+##  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: Fall Class: Spring Class: Summer Class: Winter
-## Sensitivity              0.51579       0.32836       0.48611        0.9961
-## Specificity              0.99355       0.99765       0.99590        0.4419
-## Pos Pred Value           0.94231       0.97778       0.94595        0.6056
-## Neg Pred Value           0.90945       0.82524       0.92925        0.9925
-## Prevalence               0.16964       0.23929       0.12857        0.4625
-## Detection Rate           0.08750       0.07857       0.06250        0.4607
-## Detection Prevalence     0.09286       0.08036       0.06607        0.7607
-## Balanced Accuracy        0.75467       0.66301       0.74101        0.7190</code></pre>
+## Sensitivity               0.6526        0.5000       0.73611        0.9923
+## Specificity               0.9871        0.9930       0.99385        0.6379
+## Pos Pred Value            0.9118        0.9571       0.94643        0.7022
+## Neg Pred Value            0.9329        0.8633       0.96230        0.9897
+## Prevalence                0.1696        0.2393       0.12857        0.4625
+## Detection Rate            0.1107        0.1196       0.09464        0.4589
+## Detection Prevalence      0.1214        0.1250       0.10000        0.6536
+## Balanced Accuracy         0.8199        0.7465       0.86498        0.8151</code></pre>
 <p>You should see that the model gets a lot right (high numbers on the diagonal), but predicts winter more often than it should (last row). Accuracy in the training data is pretty good.</p>
 <p>But we know that performance on the training set is not that meaningful, especially with a complex model we always get fairly good performance on the data used to build the model. What matters is how it performs on new data, so let’s check that. We can look at the same for the test set, which is a better estimate of the true performance.</p>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" title="1"><span class="co">#copy and paste the code from above, but now do it for the test set.</span></a>
-<a class="sourceLine" id="cb101-2" title="2"><span class="co">#fit2 is the RF1 model</span></a>
-<a class="sourceLine" id="cb101-3" title="3">predictions_test &lt;-<span class="st"> </span><span class="kw">predict</span>(fit2, <span class="dt">newdata=</span> data_test_mod, <span class="dt">interval=</span><span class="st">&quot;confidence&quot;</span>)</a>
-<a class="sourceLine" id="cb101-4" title="4"></a>
-<a class="sourceLine" id="cb101-5" title="5">add_predictions_test &lt;-<span class="st"> </span>data_test_mod <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb101-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictions=</span> predictions_test)</a>
-<a class="sourceLine" id="cb101-7" title="7"><span class="co">#add_predictions</span></a>
-<a class="sourceLine" id="cb101-8" title="8"></a>
-<a class="sourceLine" id="cb101-9" title="9"><span class="co">#Manual calculation of accuracy tht matches confusionMatrix call</span></a>
-<a class="sourceLine" id="cb101-10" title="10">accuracy_test &lt;-<span class="st"> </span>(<span class="kw">nrow</span>(add_predictions_test))</a>
-<a class="sourceLine" id="cb101-11" title="11"></a>
-<a class="sourceLine" id="cb101-12" title="12"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(add_predictions_test)){ </a>
-<a class="sourceLine" id="cb101-13" title="13">  <span class="cf">if</span> (add_predictions_test<span class="op">$</span>season[i] <span class="op">==</span><span class="st"> </span>add_predictions_test<span class="op">$</span>predictions[i])</a>
-<a class="sourceLine" id="cb101-14" title="14">    accuracy_test[i] =<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb101-15" title="15">  <span class="cf">else</span></a>
-<a class="sourceLine" id="cb101-16" title="16">    accuracy_test[i] =<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb101-17" title="17">}</a>
-<a class="sourceLine" id="cb101-18" title="18"></a>
-<a class="sourceLine" id="cb101-19" title="19">accuracy_table_final &lt;-<span class="st"> </span>add_predictions_test <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb101-20" title="20"><span class="st">  </span><span class="kw">transmute</span>(season, predictions, accuracy_test)</a>
-<a class="sourceLine" id="cb101-21" title="21"></a>
-<a class="sourceLine" id="cb101-22" title="22"><span class="co">#accuracy_table_final</span></a>
-<a class="sourceLine" id="cb101-23" title="23"></a>
-<a class="sourceLine" id="cb101-24" title="24">total_accuracy_final &lt;-<span class="st"> </span><span class="kw">sum</span>(accuracy_table_final<span class="op">$</span>accuracy<span class="op">/</span><span class="kw">nrow</span>(accuracy_table_final))</a>
-<a class="sourceLine" id="cb101-25" title="25"></a>
-<a class="sourceLine" id="cb101-26" title="26">total_accuracy_final</a></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1"><span class="co">#copy and paste the code from above, but now do it for the test set.</span></a>
+<a class="sourceLine" id="cb85-2" title="2"><span class="co">#fit2 is the RF1 model</span></a>
+<a class="sourceLine" id="cb85-3" title="3">predictions_test &lt;-<span class="st"> </span><span class="kw">predict</span>(fit2, <span class="dt">newdata=</span> data_test_mod, <span class="dt">interval=</span><span class="st">&quot;confidence&quot;</span>)</a>
+<a class="sourceLine" id="cb85-4" title="4"></a>
+<a class="sourceLine" id="cb85-5" title="5">add_predictions_test &lt;-<span class="st"> </span>data_test_mod <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb85-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">predictions=</span> predictions_test)</a>
+<a class="sourceLine" id="cb85-7" title="7"><span class="co">#add_predictions</span></a>
+<a class="sourceLine" id="cb85-8" title="8"></a>
+<a class="sourceLine" id="cb85-9" title="9"><span class="co">#Manual calculation of accuracy tht matches confusionMatrix call</span></a>
+<a class="sourceLine" id="cb85-10" title="10">accuracy_test &lt;-<span class="st"> </span>(<span class="kw">nrow</span>(add_predictions_test))</a>
+<a class="sourceLine" id="cb85-11" title="11"></a>
+<a class="sourceLine" id="cb85-12" title="12"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(add_predictions_test)){ </a>
+<a class="sourceLine" id="cb85-13" title="13">  <span class="cf">if</span> (add_predictions_test<span class="op">$</span>season[i] <span class="op">==</span><span class="st"> </span>add_predictions_test<span class="op">$</span>predictions[i])</a>
+<a class="sourceLine" id="cb85-14" title="14">    accuracy_test[i] =<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb85-15" title="15">  <span class="cf">else</span></a>
+<a class="sourceLine" id="cb85-16" title="16">    accuracy_test[i] =<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb85-17" title="17">}</a>
+<a class="sourceLine" id="cb85-18" title="18"></a>
+<a class="sourceLine" id="cb85-19" title="19">accuracy_table_final &lt;-<span class="st"> </span>add_predictions_test <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb85-20" title="20"><span class="st">  </span><span class="kw">transmute</span>(season, predictions, accuracy_test)</a>
+<a class="sourceLine" id="cb85-21" title="21"></a>
+<a class="sourceLine" id="cb85-22" title="22"><span class="co">#accuracy_table_final</span></a>
+<a class="sourceLine" id="cb85-23" title="23"></a>
+<a class="sourceLine" id="cb85-24" title="24">total_accuracy_final &lt;-<span class="st"> </span><span class="kw">sum</span>(accuracy_table_final<span class="op">$</span>accuracy<span class="op">/</span><span class="kw">nrow</span>(accuracy_table_final))</a>
+<a class="sourceLine" id="cb85-25" title="25"></a>
+<a class="sourceLine" id="cb85-26" title="26">total_accuracy_final</a></code></pre></div>
 <pre><code>## [1] 0.5106383</code></pre>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" title="1"><span class="kw">confusionMatrix</span>(accuracy_table_final<span class="op">$</span>predictions, accuracy_table_final<span class="op">$</span>season)</a></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" title="1"><span class="kw">confusionMatrix</span>(accuracy_table_final<span class="op">$</span>predictions, accuracy_table_final<span class="op">$</span>season)</a></code></pre></div>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
 ## Prediction Fall Spring Summer Winter
-##     Fall      7      3      4      1
-##     Spring    1      3      1      1
-##     Summer    0      2      1      0
-##     Winter   32     45     25    109
+##     Fall      8      3      8      5
+##     Spring    0      7      2      0
+##     Summer    1      3      1      2
+##     Winter   31     40     20    104
 ## 
 ## Overall Statistics
 ##                                           
@@ -4788,27 +4773,27 @@ div.tocify {
 ##     No Information Rate : 0.4723          
 ##     P-Value [Acc &gt; NIR] : 0.1334          
 ##                                           
-##                   Kappa : 0.1224          
+##                   Kappa : 0.1535          
 ##                                           
-##  Mcnemar&#39;s Test P-Value : &lt;2e-16          
+##  Mcnemar&#39;s Test P-Value : 1.284e-15       
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: Fall Class: Spring Class: Summer Class: Winter
-## Sensitivity              0.17500       0.05660      0.032258        0.9820
-## Specificity              0.95897       0.98352      0.990196        0.1774
-## Pos Pred Value           0.46667       0.50000      0.333333        0.5166
-## Neg Pred Value           0.85000       0.78166      0.870690        0.9167
+## Sensitivity              0.20000       0.13208      0.032258        0.9369
+## Specificity              0.91795       0.98901      0.970588        0.2661
+## Pos Pred Value           0.33333       0.77778      0.142857        0.5333
+## Neg Pred Value           0.84834       0.79646      0.868421        0.8250
 ## Prevalence               0.17021       0.22553      0.131915        0.4723
-## Detection Rate           0.02979       0.01277      0.004255        0.4638
-## Detection Prevalence     0.06383       0.02553      0.012766        0.8979
-## Balanced Accuracy        0.56699       0.52006      0.511227        0.5797</code></pre>
+## Detection Rate           0.03404       0.02979      0.004255        0.4426
+## Detection Prevalence     0.10213       0.03830      0.029787        0.8298
+## Balanced Accuracy        0.55897       0.56054      0.501423        0.6015</code></pre>
 <p>Here, the confusion matrix doesn’t look good at all. Off-diagonal entries are larger than diagonal, accuracy is about as good as a null model, and agrees with the cross-validated results. That last point is good, that means our cross-validation routine properly estimates the performance of “new” data. Of course, even this estimate on test data is a bit optimistic, since real new data is usually collected under slightly different circumstances and with different protocols, making it more likely that model performance is reduced.</p>
 </div>
 <div id="wrapping-up" class="section level1">
 <h1>Wrapping up</h1>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" title="1"><span class="co"># shut down the parallel computing cluster we created at the beginning of the analysis</span></a>
-<a class="sourceLine" id="cb105-2" title="2"><span class="kw">stopCluster</span>(cl)</a></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1"><span class="co"># shut down the parallel computing cluster we created at the beginning of the analysis</span></a>
+<a class="sourceLine" id="cb89-2" title="2"><span class="kw">stopCluster</span>(cl)</a></code></pre></div>
 <p>Overall, this suggests there is just no “signal” in the variables we are trying to use to predict the outcome, and the model fits to “noise” - thus doing ok on training data but failing on the test/cross-validated performance evaluation.</p>
 <p>We can conclude that this is an analysis where we walk away “empty handed”. If this were a real analysis and you had data and did a ‘let’s see if something is going on’ analysis, this would be somewhat disappointing. If you had a specific, plausible hypothesis before you started your analysis (e.g., that outbreak size is correlated with season), finding that your biologically reasonable hypothesis doesn’t seem to be right is useful. Unfortunately, null results are still hard to publish.</p>
 <p>Note that we didn’t use p-values here, but I bet we would have found several that are statistically significant <strong>when evaluated on the training data</strong> (as they usually are). But they would be meaningless and essentially “fitting the noise”. I contend that a lot of what’s published out there is exactly that, spurious p-values because models are evaluated on the training data.</p>
